@@ -34,8 +34,22 @@ img { max-width: 100%; }
 /* Cabeçalho */
 .site-header { position: fixed; z-index: 50; inset: 0 0 auto; min-height: var(--header-height); border-bottom: 1px solid rgba(244, 241, 234, 0.1); background: rgba(3, 10, 18, 0.82); backdrop-filter: blur(18px); }
 .header-inner { min-height: var(--header-height); display: flex; align-items: center; justify-content: space-between; gap: 2rem; }
-.wordmark { display: inline-flex; align-items: center; gap: 0.6rem; font-size: 0.95rem; font-weight: 650; letter-spacing: -0.02em; }
-.wordmark-mark { width: 1.5rem; height: auto; color: var(--orange); filter: drop-shadow(0 0 1rem rgba(255, 122, 0, 0.35)); }
+/* Lockup da marca (monograma + MONVELA + DIGITAL), espelha o logo oficial.
+   A entreletra larga sobra à direita da última letra: o margin-right negativo
+   cancela essa sobra para o texto alinhar/centralizar de verdade. */
+.brand-link { display: inline-flex; }
+.brand-lockup { display: inline-flex; align-items: center; gap: 0.72rem; }
+.brand-lockup-mark { flex: none; width: 1.7rem; height: auto; color: var(--orange); filter: drop-shadow(0 0 1.1rem rgba(255, 122, 0, 0.3)); }
+.brand-lockup-text { display: grid; gap: 0.26rem; }
+.brand-lockup-name { margin-right: -0.3em; color: var(--ivory); font-size: 0.86rem; font-weight: 520; line-height: 1; letter-spacing: 0.3em; text-transform: uppercase; }
+.brand-lockup-sub { display: flex; align-items: center; gap: 0.42rem; color: var(--orange); font-size: 0.5rem; font-weight: 500; line-height: 1; text-transform: uppercase; }
+.brand-lockup-sub > span { margin-right: -0.42em; letter-spacing: 0.42em; }
+.brand-lockup-sub::before, .brand-lockup-sub::after { content: ""; flex: none; width: 0.6rem; height: 1px; background: currentColor; }
+.brand-lockup-stacked { flex-direction: column; align-items: flex-start; gap: 1rem; }
+.brand-lockup-stacked .brand-lockup-mark { width: 2.5rem; }
+.brand-lockup-stacked .brand-lockup-name { font-size: 1rem; }
+.brand-lockup-stacked .brand-lockup-sub { font-size: 0.56rem; }
+.brand-lockup-stacked .brand-lockup-sub::before, .brand-lockup-stacked .brand-lockup-sub::after { width: 1.2rem; }
 .desktop-nav { display: flex; align-items: center; gap: clamp(1.25rem, 3vw, 2.5rem); margin-left: auto; color: #cbd0d4; font-size: 0.86rem; }
 .desktop-nav a, .text-link { transition: color 180ms ease; }
 .desktop-nav a:hover, .text-link:hover { color: var(--orange-bright); }

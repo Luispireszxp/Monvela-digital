@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { company } from "@/config/company";
 import { siteConfig } from "@/content/site";
-import { BrandMark } from "./brand-mark";
+import { BrandLockup } from "./brand-lockup";
 import { WhatsAppLink } from "./whatsapp-link";
 
 function FacebookIcon() {
@@ -21,9 +21,8 @@ export function Header() {
   return (
     <header className="site-header">
       <div className="shell header-inner">
-        <Link className="wordmark" href="/" aria-label={`${siteConfig.name} — início`}>
-          <BrandMark className="wordmark-mark" />
-          <span>{siteConfig.name}</span>
+        <Link className="brand-link" href="/" aria-label={`${siteConfig.name} — início`}>
+          <BrandLockup />
         </Link>
 
         <nav className="desktop-nav" aria-label="Navegação principal">

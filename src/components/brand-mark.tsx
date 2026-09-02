@@ -1,28 +1,29 @@
 /**
- * Monograma "M" da Monvela — recriação geométrica em SVG a partir do logo
- * oficial (public/brand/monvela-digital.png), para uso nítido e leve no
- * cabeçalho, rodapé e favicon. Herda a cor via `currentColor`.
+ * Monograma "M" da Monvela.
  *
- * Substituir por um SVG oficial da marca quando disponível, mantendo a mesma
- * proporção de viewBox.
+ * Vetorizado a partir do logo oficial (`public/brand/monvela-digital.png`):
+ * as coordenadas do viewBox são as do PNG (recorte 427..825 × 250..652),
+ * medidas pixel a pixel — não é uma aproximação a olho. Todas as diagonais
+ * usam a mesma inclinação da marca (dx/dy ≈ 1,29).
+ *
+ * Herda a cor por `currentColor`, então funciona em qualquer fundo.
  */
 export function BrandMark({ className }: { className?: string }) {
   return (
     <svg
       className={className}
-      viewBox="0 0 128 118"
+      viewBox="0 0 398 402"
       fill="currentColor"
       aria-hidden="true"
       focusable="false"
     >
-      {/* perna esquerda, com pé recortado na base interna */}
-      <path d="M16 34 L52 58 L52 92 L40 92 L40 104 L16 104 Z" />
-      {/* perna direita (espelhada) */}
-      <path d="M112 34 L76 58 L76 92 L88 92 L88 104 L112 104 Z" />
-      {/* cunha central apontando para baixo */}
-      <path d="M56 52 L72 52 L64 96 Z" />
-      {/* acento "^" flutuante sobre o vale */}
-      <path d="M64 12 L82 32 L73 32 L64 21 L55 32 L46 32 Z" />
+      {/*
+        Corpo do M: pernas com pé recortado para dentro na base, unidas pelo
+        vale superior, com a cunha central em "V" apontando para baixo.
+      */}
+      <path d="M0 75 L199 226 L398 75 L398 402 L315 402 L315 357 L341 344 L341 187 L199 297 L57 187 L57 344 L83 357 L83 402 L0 402 Z" />
+      {/* Acento "^" flutuante sobre o vale */}
+      <path d="M199 0 L101 76 L137 104 L199 55 L261 104 L297 76 Z" />
     </svg>
   );
 }

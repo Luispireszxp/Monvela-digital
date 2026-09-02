@@ -1,9 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Monvela Digital">
   <rect width="128" height="128" rx="28" fill="#0c2036"/>
-  <g fill="#ff7a00">
-    <path d="M22 38 L56 60 L56 92 L44 92 L44 104 L22 104 Z"/>
-    <path d="M106 38 L72 60 L72 92 L84 92 L84 104 L106 104 Z"/>
-    <path d="M60 56 L74 56 L67 96 Z"/>
-    <path d="M64 18 L82 38 L73 38 L64 27 L55 38 L46 38 Z"/>
+  <g fill="#ff7a00" transform="translate(20.5 20) scale(0.2189)">
+    <path d="M0 75 L199 226 L398 75 L398 402 L315 402 L315 357 L341 344 L341 187 L199 297 L57 187 L57 344 L83 357 L83 402 L0 402 Z"/>
+    <path d="M199 0 L101 76 L137 104 L199 55 L261 104 L297 76 Z"/>
   </g>
 </svg>

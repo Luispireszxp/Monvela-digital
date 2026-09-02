@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { company } from "@/config/company";
 import { siteConfig } from "@/content/site";
-import { BrandMark } from "./brand-mark";
+import { BrandLockup } from "./brand-lockup";
 import { WhatsAppLink } from "./whatsapp-link";
 
 function FacebookIcon() {
@@ -20,9 +20,8 @@ export function Footer() {
     <footer className="footer">
       <div className="shell footer-grid">
         <div>
-          <Link className="wordmark" href="/" aria-label={`${siteConfig.name} — início`}>
-            <BrandMark className="wordmark-mark" />
-            <span>{siteConfig.name}</span>
+          <Link className="brand-link" href="/" aria-label={`${siteConfig.name} — início`}>
+            <BrandLockup variant="stacked" />
           </Link>
           <p>{siteConfig.footer.positioning}</p>
         </div>
