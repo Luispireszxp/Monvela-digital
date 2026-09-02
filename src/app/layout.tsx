@@ -18,6 +18,14 @@ const geistMono = localFont({
   display: "swap",
 });
 
+/** Serifada editorial — usada só no título do hero (nova direção visual). */
+const instrumentSerif = localFont({
+  src: "./fonts/instrument-serif-latin.woff2",
+  variable: "--font-serif-display",
+  weight: "400",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.siteUrl),
   title: {
@@ -61,7 +69,10 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="pt-BR" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html
+      lang="pt-BR"
+      className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable}`}
+    >
       <body>
         {children}
         <Analytics />

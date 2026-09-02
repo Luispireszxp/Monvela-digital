@@ -43,15 +43,17 @@ export interface SiteConfig {
   readonly whatsappUrl: string;
   readonly navigation: readonly NavItem[];
   readonly hero: {
-    readonly eyebrow: string;
     readonly titleStart: string;
     readonly titleEnd: string;
+    /** Fecha a pergunta em destaque, na cor de acento. */
+    readonly titleMark: string;
     readonly description: string;
     readonly primaryCta: string;
-    readonly secondaryCta: string;
-    readonly secondaryHref: string;
     readonly note: string;
-    readonly imageAlt: string;
+    readonly scrollHint: string;
+    readonly scrollHref: string;
+    /** Texto alternativo da cena animada. */
+    readonly animationLabel: string;
   };
   readonly problem: {
     readonly eyebrow: string;
@@ -156,17 +158,17 @@ export const siteConfig = {
     { label: "Contato", href: "/#contato" },
   ],
   hero: {
-    eyebrow: "Ecossistema digital para negócios locais",
     titleStart: "Seu negócio existe.",
-    titleEnd: "Mas ele também existe na internet?",
+    titleEnd: "Mas ele também existe no digital",
+    titleMark: "?",
     description:
-      "A Monvela cria e estrutura a presença digital de negócios locais — do site e domínio à divulgação, análise de resultados e ferramentas de gestão.",
-    primaryCta: "Falar agora no WhatsApp",
-    secondaryCta: "Conheça nossas soluções",
-    secondaryHref: "#solucoes",
-    note: "Atendimento direto, sem formulários e sem compromisso.",
-    imageAlt:
-      "Arquitetura abstrata iluminada representando a passagem de um negócio físico para o ambiente digital",
+      "Seus clientes procuram soluções na internet. A Monvela conecta o seu negócio às pessoas certas.",
+    primaryCta: "Levar meu negócio para o digital",
+    note: "Atendimento direto pelo WhatsApp, sem formulários e sem compromisso.",
+    scrollHint: "Role para conhecer as soluções",
+    scrollHref: "#solucoes",
+    animationLabel:
+      "Ilustração animada: um comércio local tenta se conectar a um celular e à internet, mas o caminho se rompe no meio, mostrando a ausência de presença digital.",
   },
   problem: {
     eyebrow: "O que está em jogo",
