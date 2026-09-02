@@ -61,12 +61,11 @@ export interface SiteConfig {
     readonly intro: string;
     readonly consequences: readonly Consequence[];
   };
-  readonly searchStart: {
+  readonly journey: {
     readonly eyebrow: string;
     readonly title: string;
-    readonly description: string;
-    readonly segments: readonly string[];
-    readonly flow: readonly string[];
+    readonly closing: string;
+    readonly closingNote: string;
   };
   readonly digitalContext: {
     readonly eyebrow: string;
@@ -190,25 +189,12 @@ export const siteConfig = {
       },
     ],
   },
-  searchStart: {
+  journey: {
     eyebrow: "Comportamento de quem procura",
-    title: "A busca pelo próximo serviço começa na internet.",
-    description:
-      "Quando precisa de um restaurante, hotel, oficina, padaria ou profissional, o cliente pode pesquisar, comparar e decidir antes mesmo de sair de casa.",
-    segments: [
-      "Restaurante",
-      "Hotel e pousada",
-      "Oficina",
-      "Padaria",
-      "Mercado",
-      "Advocacia",
-      "Farmácia",
-      "Salão e barbearia",
-      "Clínica",
-      "Loja",
-      "Prestador de serviços",
-    ],
-    flow: ["Pesquisa", "Compara", "Decide"],
+    title: "Pesquisa, compara e decide — tudo antes de sair de casa.",
+    closing: "Quem encontra, compara. Quem confia, entra em contato.",
+    closingNote:
+      "Um site profissional ajuda sua empresa a participar da decisão do cliente.",
   },
   digitalContext: {
     eyebrow: "Contexto digital",

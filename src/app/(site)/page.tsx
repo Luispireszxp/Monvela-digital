@@ -1,6 +1,7 @@
 import { About } from "@/components/about";
 import { ConceptProjects } from "@/components/concept-projects";
 import { Contact } from "@/components/contact";
+import { CustomerJourney } from "@/components/customer-journey";
 import { Cycle } from "@/components/cycle";
 import { DigitalContext } from "@/components/digital-context";
 import { FAQ } from "@/components/faq";
@@ -9,7 +10,6 @@ import { Hero } from "@/components/hero";
 import { Partners } from "@/components/partners";
 import { Problem } from "@/components/problem";
 import { Process } from "@/components/process";
-import { SearchStart } from "@/components/search-start";
 import { Solution } from "@/components/solution";
 
 // Conteúdo das seções Solução (pilares) e Dúvidas (FAQ) vem do Supabase (ISR):
@@ -21,7 +21,7 @@ export default function Home() {
     <main>
       <Hero />
       <Problem />
-      <SearchStart />
+      <CustomerJourney />
       <DigitalContext />
       <Solution />
       <Cycle />
