@@ -1,4 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Ícone provisório da Monvela Digital">
-  <rect width="64" height="64" rx="16" fill="#030A12"/>
-  <circle cx="32" cy="32" r="12" fill="#FF7A00"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Monvela Digital">
+  <rect width="128" height="128" rx="28" fill="#0c2036"/>
+  <g fill="#ff7a00">
+    <path d="M22 38 L56 60 L56 92 L44 92 L44 104 L22 104 Z"/>
+    <path d="M106 38 L72 60 L72 92 L84 92 L84 104 L106 104 Z"/>
+    <path d="M60 56 L74 56 L67 96 Z"/>
+    <path d="M64 18 L82 38 L73 38 L64 27 L55 38 L46 38 Z"/>
+  </g>
 </svg>

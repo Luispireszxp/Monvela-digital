@@ -1,15 +1,18 @@
 import { About } from "@/components/about";
 import { ConceptProjects } from "@/components/concept-projects";
 import { Contact } from "@/components/contact";
+import { Cycle } from "@/components/cycle";
 import { FAQ } from "@/components/faq";
 import { FinalCTA } from "@/components/final-cta";
+import { GoogleStat } from "@/components/google-stat";
 import { Hero } from "@/components/hero";
-import { HowItWorks } from "@/components/how-it-works";
+import { Partners } from "@/components/partners";
 import { Problem } from "@/components/problem";
 import { Process } from "@/components/process";
-import { Services } from "@/components/services";
+import { SearchStart } from "@/components/search-start";
+import { Solution } from "@/components/solution";
 
-// Conteúdo das seções Serviços/Dúvidas/Projetos vem do Supabase (ISR):
+// Conteúdo das seções Solução (pilares) e Dúvidas (FAQ) vem do Supabase (ISR):
 // edições no banco aparecem no site em até 60s, sem novo deploy.
 export const revalidate = 60;
 
@@ -18,9 +21,12 @@ export default function Home() {
     <main>
       <Hero />
       <Problem />
-      <HowItWorks />
-      <Services />
+      <SearchStart />
+      <GoogleStat />
+      <Solution />
+      <Cycle />
       <ConceptProjects />
+      <Partners />
       <Process />
       <About />
       <FAQ />

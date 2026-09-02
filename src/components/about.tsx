@@ -1,3 +1,4 @@
+import { company } from "@/config/company";
 import { siteConfig } from "@/content/site";
 
 export function About() {
@@ -17,6 +18,16 @@ export function About() {
               <span key={value}>{value}</span>
             ))}
           </div>
+          {company.hasFacebook ? (
+            <a
+              className="text-link about-facebook"
+              href={company.facebookUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {company.facebookLabel} <span aria-hidden="true">↗</span>
+            </a>
+          ) : null}
         </div>
       </div>
     </section>

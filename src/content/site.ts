@@ -1,4 +1,4 @@
-import { env } from "@/lib/env";
+import { company } from "@/config/company";
 
 type NavItem = { readonly label: string; readonly href: string };
 type SectionIntro = {
@@ -6,11 +6,22 @@ type SectionIntro = {
   readonly title: string;
   readonly description: string;
 };
-type ServiceItem = { readonly title: string; readonly description: string };
+type Consequence = { readonly title: string; readonly text: string };
+type Pillar = {
+  readonly title: string;
+  readonly description: string;
+  readonly note?: string;
+  readonly points?: readonly string[];
+};
+type CycleStep = { readonly label: string; readonly text: string };
 type ConceptItem = {
-  readonly number: string;
+  readonly name: string;
   readonly segment: string;
-  readonly idea: string;
+  readonly description: string;
+  /** Caminhos em /public. Vazios por enquanto — degradam para um marcador. */
+  readonly coverImage: string;
+  readonly desktopPreview: string;
+  readonly mobilePreview: string;
 };
 type ProcessStep = {
   readonly step: string;
@@ -35,28 +46,52 @@ export interface SiteConfig {
     readonly eyebrow: string;
     readonly titleStart: string;
     readonly titleEnd: string;
+    readonly description: string;
     readonly primaryCta: string;
     readonly secondaryCta: string;
+    readonly secondaryHref: string;
     readonly note: string;
     readonly imageAlt: string;
-    readonly imageNote: string;
   };
   readonly problem: {
     readonly eyebrow: string;
     readonly title: string;
-    readonly paragraphs: readonly string[];
+    readonly intro: string;
+    readonly consequences: readonly Consequence[];
   };
-  readonly howItWorks: {
+  readonly searchStart: {
     readonly eyebrow: string;
     readonly title: string;
     readonly description: string;
-    readonly accessibleLabel: string;
+    readonly segments: readonly string[];
+    readonly flow: readonly string[];
   };
-  readonly journey: readonly string[];
-  readonly servicesSection: SectionIntro;
-  readonly services: readonly ServiceItem[];
-  readonly conceptsSection: SectionIntro;
+  readonly googleStat: {
+    readonly eyebrow: string;
+    readonly value: string;
+    readonly label: string;
+    readonly complement: string;
+    readonly sourceLabel: string;
+    readonly sourceUrl: string;
+  };
+  readonly solution: {
+    readonly eyebrow: string;
+    readonly title: string;
+    readonly description: string;
+    readonly pillars: readonly Pillar[];
+  };
+  readonly cycle: {
+    readonly eyebrow: string;
+    readonly title: string;
+    readonly accessibleLabel: string;
+    readonly steps: readonly CycleStep[];
+  };
+  readonly conceptsSection: SectionIntro & {
+    readonly disclaimer: string;
+    readonly ctaLabel: string;
+  };
   readonly concepts: readonly ConceptItem[];
+  readonly partnersSection: SectionIntro;
   readonly processSection: SectionIntro;
   readonly process: readonly ProcessStep[];
   readonly about: {
@@ -101,169 +136,249 @@ export interface SiteConfig {
   };
 }
 
-const whatsappMessage =
-  "Olá! Conheci a Monvela e gostaria de receber uma ideia inicial para o site do meu negócio.";
-
 export const siteConfig = {
-  name: "Monvela Digital",
-  shortName: "Monvela",
+  name: company.name,
+  shortName: company.shortName,
   description:
-    "Criamos sites profissionais para ajudar negócios locais a apresentar seu valor e facilitar o contato com novos clientes.",
-  positioning: "Seu negócio, além da fachada.",
-  siteUrl: env.siteUrl,
-  contactEmail: env.contactEmail,
-  whatsappNumber: env.whatsappNumber,
-  hasWhatsapp: env.hasWhatsapp,
-  whatsappMessage,
-  whatsappUrl: `https://wa.me/${env.whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`,
+    "A Monvela cria e estrutura a presença digital de negócios locais — do site e domínio à divulgação, análise de resultados e ferramentas de gestão.",
+  positioning: "Presença digital que cresce com o seu negócio.",
+  siteUrl: company.siteUrl,
+  contactEmail: company.contactEmail,
+  whatsappNumber: company.whatsappNumber,
+  hasWhatsapp: company.hasWhatsapp,
+  whatsappMessage: company.whatsappMessage,
+  whatsappUrl: company.whatsappUrl,
   navigation: [
-    { label: "Trabalho", href: "/#trabalho" },
-    { label: "Como funciona", href: "/#como-funciona" },
+    { label: "Soluções", href: "/#solucoes" },
+    { label: "Projetos", href: "/#projetos" },
     { label: "Sobre", href: "/#sobre" },
     { label: "Dúvidas", href: "/#duvidas" },
     { label: "Contato", href: "/#contato" },
   ],
   hero: {
-    eyebrow: "Presença digital para negócios locais",
-    titleStart: "Seu negócio,",
-    titleEnd: "além da fachada.",
-    primaryCta: "Receba uma ideia gratuita",
-    secondaryCta: "Veja como funciona",
-    note: "Uma ideia inicial para o seu projeto, sem compromisso.",
+    eyebrow: "Ecossistema digital para negócios locais",
+    titleStart: "Seu negócio existe.",
+    titleEnd: "Mas ele também existe na internet?",
+    description:
+      "A Monvela cria e estrutura a presença digital de negócios locais — do site e domínio à divulgação, análise de resultados e ferramentas de gestão.",
+    primaryCta: "Falar agora no WhatsApp",
+    secondaryCta: "Conheça nossas soluções",
+    secondaryHref: "#solucoes",
+    note: "Atendimento direto, sem formulários e sem compromisso.",
     imageAlt:
       "Arquitetura abstrata iluminada representando a passagem de um negócio físico para o ambiente digital",
-    imageNote:
-      "Visual conceitual provisório · substituir por imagem definitiva em public/images",
   },
   problem: {
-    eyebrow: "O ponto de partida",
-    title: "Seu negócio já existe. Agora ele precisa ser encontrado.",
-    paragraphs: [
-      "Muitos bons negócios já têm qualidade, clientes e uma reputação construída no dia a dia.",
-      "Mas, quando alguém procura por eles no celular, ainda encontra poucas informações — ou nenhuma presença que represente o seu verdadeiro valor.",
+    eyebrow: "O que está em jogo",
+    title: "Seu negócio está aberto. Mas será que está sendo encontrado?",
+    intro:
+      "Antes de visitar uma empresa, muitas pessoas pesquisam, comparam opções e procuram informações no celular. Sem uma presença digital organizada, um bom negócio pode perder visibilidade, credibilidade e oportunidades de contato.",
+    consequences: [
+      {
+        title: "Menos chances de ser encontrado",
+        text: "Quem procura pelo celular pode simplesmente não chegar até a sua empresa.",
+      },
+      {
+        title: "Dificuldade para transmitir confiança",
+        text: "Sem um espaço próprio e organizado, fica mais difícil mostrar o valor do seu trabalho.",
+      },
+      {
+        title: "Espaço para o concorrente aparecer primeiro",
+        text: "Quando a informação não está do seu lado, costuma estar do lado de quem se organizou.",
+      },
     ],
   },
-  howItWorks: {
-    eyebrow: "Como a Monvela trabalha",
-    title: "Do espaço físico para uma presença que continua falando pelo seu negócio.",
+  searchStart: {
+    eyebrow: "Comportamento de quem procura",
+    title: "A busca pelo próximo serviço começa na internet.",
     description:
-      "A Monvela organiza as informações da empresa, desenvolve sua presença digital e cria caminhos simples para o público entrar em contato.",
+      "Quando precisa de um restaurante, hotel, oficina, padaria ou profissional, o cliente pode pesquisar, comparar e decidir antes mesmo de sair de casa.",
+    segments: [
+      "Restaurante",
+      "Hotel e pousada",
+      "Oficina",
+      "Padaria",
+      "Mercado",
+      "Advocacia",
+      "Farmácia",
+      "Salão e barbearia",
+      "Clínica",
+      "Loja",
+      "Prestador de serviços",
+    ],
+    flow: ["Pesquisa", "Compara", "Decide"],
+  },
+  googleStat: {
+    eyebrow: "Contexto de mercado",
+    value: "87,5%",
+    label:
+      "Participação do Google entre os mecanismos de busca utilizados no Brasil em agosto de 2026.",
+    complement:
+      "Estar presente na internet ajuda sua empresa a participar do momento em que o cliente pesquisa e compara suas opções.",
+    sourceLabel: "Fonte: StatCounter Global Stats — agosto de 2026.",
+    sourceUrl: "https://gs.statcounter.com/search-engine-market-share/all/brazil",
+  },
+  solution: {
+    eyebrow: "O ecossistema Monvela",
+    title: "Uma estrutura digital que cresce junto com o seu negócio.",
+    description:
+      "A Monvela começa construindo o site e integra outras soluções conforme a necessidade de cada cliente. Cada serviço é contratado à parte, após proposta e definição de escopo.",
+    pillars: [
+      {
+        title: "Sites profissionais",
+        description:
+          "Sites rápidos, responsivos e desenvolvidos para apresentar o negócio e facilitar o contato.",
+      },
+      {
+        title: "Domínio e publicação",
+        description:
+          "Auxílio na compra, configuração, renovação e administração do domínio e da hospedagem.",
+        note: "O domínio fica, preferencialmente, registrado em nome ou na conta do cliente, com os acessos documentados.",
+      },
+      {
+        title: "Divulgação com Meta",
+        description:
+          "Estruturação de campanhas pelo Meta Ads e organização dos ativos no Meta Business Suite, quando esse serviço fizer parte do projeto.",
+        note: "O trabalho é de estrutura e acompanhamento. Não há promessa de resultado.",
+      },
+      {
+        title: "Google Analytics",
+        description:
+          "Configuração de medição para entender o que acontece depois que o visitante chega ao site:",
+        points: [
+          "Quantidade de visitas",
+          "Origem dos visitantes",
+          "Páginas acessadas",
+          "Cliques no WhatsApp",
+          "Ações importantes realizadas no site",
+        ],
+        note: "O Analytics mede resultados e ajuda a tomar decisões — não altera sozinho o desempenho do negócio.",
+      },
+      {
+        title: "Gestão integrada",
+        description:
+          "Painéis e ferramentas internas conectadas ao site, desenvolvidos sob medida após a análise da necessidade:",
+        points: [
+          "Solicitações",
+          "Agendamentos",
+          "Cadastros",
+          "Pedidos",
+          "Acompanhamento de clientes",
+          "Relatórios",
+          "Organização de processos",
+        ],
+        note: "Não existe um sistema genérico pronto para todos os clientes: cada painel é construído para o fluxo do negócio.",
+      },
+    ],
+  },
+  cycle: {
+    eyebrow: "Como as peças se conectam",
+    title: "Presença, divulgação, medição e gestão no mesmo lugar.",
     accessibleLabel:
-      "Seu negócio passa pela Monvela, chega à internet e se apresenta ao público",
+      "Ciclo Monvela: atraímos, apresentamos, convertemos, medimos e organizamos.",
+    steps: [
+      { label: "Atraímos", text: "A divulgação aproxima o público do seu negócio." },
+      { label: "Apresentamos", text: "O site apresenta a empresa com clareza." },
+      { label: "Convertemos", text: "O WhatsApp recebe o contato, sem formulário no meio." },
+      { label: "Medimos", text: "O Analytics ajuda a medir o que funciona." },
+      { label: "Organizamos", text: "As ferramentas de gestão organizam o atendimento." },
+    ],
   },
-  journey: ["Seu negócio", "Monvela", "Internet", "Público"],
-  servicesSection: {
-    eyebrow: "Soluções essenciais",
-    title: "O necessário para o seu negócio começar bem na internet.",
-    description:
-      "Sem pacotes inflados: uma base objetiva, profissional e fácil de usar.",
-  },
-  services: [
-    {
-      title: "Sites profissionais",
-      description:
-        "Uma apresentação clara e confiável, feita para valorizar o que torna o seu negócio único.",
-    },
-    {
-      title: "Design responsivo",
-      description:
-        "Páginas que se adaptam ao celular, tablet e computador sem perder qualidade ou legibilidade.",
-    },
-    {
-      title: "Integração com WhatsApp",
-      description:
-        "Caminhos diretos para transformar interesse em conversa, com uma mensagem inicial já preparada.",
-    },
-    {
-      title: "Localização e mapa",
-      description:
-        "Endereço, horários e localização organizados para facilitar a visita e o contato do cliente.",
-    },
-    {
-      title: "Domínio e hospedagem",
-      description:
-        "Orientação para escolher o endereço, a hospedagem e os recursos necessários para colocar o site no ar.",
-    },
-    {
-      title: "Suporte para publicação",
-      description:
-        "Acompanhamento até a publicação, com manutenção posterior combinada conforme a necessidade.",
-    },
-  ],
   conceptsSection: {
     eyebrow: "Projetos-conceito",
-    title: "Possibilidades para negócios que movimentam cidades.",
+    title: "Direções visuais para negócios que movimentam a cidade.",
     description:
-      "Demonstrações de direção criativa para diferentes segmentos. Não representam clientes, contratos ou resultados reais.",
+      "Demonstrações de direção criativa para diferentes segmentos. Enquanto não representarem clientes reais, são identificadas como projetos-conceito.",
+    disclaimer:
+      "Projeto-conceito — não representa um cliente real, contrato, avaliação ou resultado.",
+    ctaLabel: "Conhecer o projeto",
   },
   concepts: [
     {
-      number: "01",
-      segment: "Gastronomia",
-      idea: "Cardápio, ambiente, localização e contato para reservas em uma apresentação convidativa.",
+      name: "Mesa & Brasa",
+      segment: "Restaurante",
+      description:
+        "Cardápio, ambiente e reservas reunidos em uma página que dá vontade de visitar.",
+      coverImage: "",
+      desktopPreview: "",
+      mobilePreview: "",
     },
     {
-      number: "02",
-      segment: "Hotelaria",
-      idea: "Acomodações, estrutura, localização e formas de contato apresentadas com clareza.",
+      name: "Pousada Vista Clara",
+      segment: "Hotel e pousada",
+      description:
+        "Acomodações, estrutura e localização apresentadas com calma e confiança.",
+      coverImage: "",
+      desktopPreview: "",
+      mobilePreview: "",
     },
     {
-      number: "03",
-      segment: "Comércio",
-      idea: "Produtos, diferenciais e endereço reunidos em uma vitrine digital própria.",
-    },
-    {
-      number: "04",
-      segment: "Serviços profissionais",
-      idea: "Especialidades, credibilidade e formas de atendimento organizadas sem complicação.",
-    },
-    {
-      number: "05",
-      segment: "Setor automotivo",
-      idea: "Serviços, estrutura da oficina e contato rápido para orçamentos e agendamentos.",
+      name: "Oficina Norte",
+      segment: "Oficina e comércio local",
+      description:
+        "Serviços, horários e contato rápido para orçamento, sem rodeios.",
+      coverImage: "",
+      desktopPreview: "",
+      mobilePreview: "",
     },
   ],
-  processSection: {
-    eyebrow: "Processo",
-    title: "Ouvimos. Criamos. Publicamos.",
+  partnersSection: {
+    eyebrow: "Parceiros e clientes",
+    title: "Negócios que caminham com a Monvela",
     description:
-      "Um caminho direto, com decisões claras e conversa próxima em cada etapa.",
+      "Empresas que confiaram na Monvela para construir ou fortalecer sua presença digital.",
+  },
+  processSection: {
+    eyebrow: "Como trabalhamos",
+    title: "Entendemos. Criamos. Publicamos. Evoluímos.",
+    description:
+      "Um caminho direto, com decisões claras e conversa próxima em cada etapa. Cada serviço adicional depende de proposta, escopo e contratação.",
   },
   process: [
     {
       step: "01",
-      title: "Você conta sobre o negócio",
-      text: "Entendemos sua realidade, seus clientes e o que precisa ser apresentado.",
+      title: "Conversa no WhatsApp",
+      text: "O primeiro contato é direto com a Monvela, sem formulário nem cadastro.",
     },
     {
       step: "02",
-      title: "Preparamos uma ideia inicial",
-      text: "Apresentamos uma direção inicial para a conversa — não um site completo ou período de teste.",
+      title: "Entendimento do negócio",
+      text: "Ouvimos a realidade da empresa, seus clientes e seus objetivos.",
     },
     {
       step: "03",
-      title: "Você analisa a proposta",
-      text: "Alinhamos o escopo, esclarecemos dúvidas e combinamos os próximos passos.",
+      title: "Ideia inicial",
+      text: "Preparamos uma direção inicial para a conversa — não um site pronto nem um teste.",
     },
     {
       step: "04",
-      title: "Criamos o site",
-      text: "Transformamos o conteúdo em uma experiência profissional e responsiva.",
+      title: "Definição de escopo",
+      text: "Combinamos site, domínio e integrações que fazem sentido para o momento do negócio.",
     },
     {
       step: "05",
-      title: "Revisamos e publicamos",
-      text: "Ajustamos os detalhes finais e acompanhamos a entrada do projeto no ar.",
+      title: "Desenvolvimento e revisão",
+      text: "Transformamos o conteúdo em um site profissional e ajustamos os detalhes finais.",
+    },
+    {
+      step: "06",
+      title: "Publicação",
+      text: "Colocamos o projeto no ar com o domínio e os acessos organizados.",
+    },
+    {
+      step: "07",
+      title: "Acompanhamento e evolução",
+      text: "Seguimos evoluindo o projeto conforme o serviço contratado.",
     },
   ],
   about: {
     eyebrow: "Sobre a Monvela",
     title: "Tecnologia com conversa simples e presença de verdade.",
     paragraphs: [
-      "A Monvela nasceu para ajudar empresas e comércios locais a construir uma presença digital profissional, simples e acessível.",
+      "A Monvela ajuda empresas e comércios locais a construir uma presença digital profissional, simples e acessível — começando pelo site e crescendo conforme a necessidade.",
       "Cada projeto começa com atenção ao negócio real: sua história, seus serviços, seus clientes e a forma como a empresa prefere se comunicar.",
     ],
-    values: ["Atendimento próximo", "Projeto personalizado", "Comunicação direta"],
+    values: ["Atendimento próximo", "Projeto sob medida", "Comunicação direta"],
   },
   faqSection: {
     eyebrow: "Dúvidas frequentes",
@@ -310,12 +425,47 @@ export const siteConfig = {
       answer:
         "O projeto será preparado tecnicamente para mecanismos de busca. Porém, indexação e posicionamento dependem de fatores como tempo, conteúdo, concorrência e critérios dos próprios buscadores; por isso, não podem ser garantidos.",
     },
+    {
+      question: "A Monvela também trabalha com anúncios?",
+      answer:
+        "Sim, quando faz parte do projeto. A Monvela estrutura campanhas pelo Meta Ads e organiza os ativos no Meta Business Suite. O investimento em mídia é pago diretamente às plataformas e não há promessa de resultado.",
+    },
+    {
+      question: "Para que serve o Google Analytics?",
+      answer:
+        "Para medir o que acontece no site: quantidade de visitas, origem dos visitantes, páginas acessadas, cliques no WhatsApp e outras ações importantes. Serve para entender o comportamento e apoiar decisões — não para melhorar o desempenho sozinho.",
+    },
+    {
+      question: "A Monvela pode administrar meu domínio?",
+      answer:
+        "Sim. A Monvela ajuda na compra, configuração, renovação e administração do domínio e da hospedagem, sempre com os acessos documentados.",
+    },
+    {
+      question: "O domínio ficará no nome de quem?",
+      answer:
+        "Preferencialmente no seu nome ou na sua conta. A Monvela organiza e documenta os acessos para que o controle seja sempre do cliente.",
+    },
+    {
+      question: "É possível integrar um sistema de gestão ao site?",
+      answer:
+        "Sim. Painéis e ferramentas internas — solicitações, agendamentos, cadastros, pedidos, relatórios — podem ser desenvolvidos sob medida, após a análise da necessidade. Não é um sistema genérico pronto.",
+    },
+    {
+      question: "Preciso contratar todos os serviços?",
+      answer:
+        "Não. A Monvela começa pelo site, e cada solução — domínio, divulgação, Analytics, gestão — é contratada à parte, conforme a necessidade do negócio.",
+    },
+    {
+      question: "Como é feito o contato pelo WhatsApp?",
+      answer:
+        "Os botões do site abrem uma conversa no WhatsApp com uma mensagem inicial já preparada. Não há formulário, cadastro ou etapa intermediária.",
+    },
   ],
   contactSection: {
     eyebrow: "Fale com a Monvela",
     title: "Conte sobre o seu negócio.",
     description:
-      "Deixe seu contato e um resumo do que você precisa. A Monvela responde com uma ideia inicial para o projeto, sem compromisso.",
+      "Prefere começar pelo WhatsApp? É o caminho mais rápido. Se preferir, deixe seu contato aqui e um resumo do que você precisa — a Monvela responde com uma ideia inicial, sem compromisso.",
     whatsappLabel: "Prefiro falar pelo WhatsApp",
     submitLabel: "Enviar",
     fields: {
@@ -330,16 +480,16 @@ export const siteConfig = {
     error: "Não foi possível enviar agora. Tente novamente ou fale pelo WhatsApp.",
   },
   finalCta: {
-    eyebrow: "Seu próximo passo",
-    title: "A próxima presença marcante pode ser a sua.",
+    eyebrow: "Próximo passo",
+    title: "A conversa começa com uma mensagem.",
     description:
-      "Conte sobre o seu negócio e receba uma ideia inicial para o seu projeto.",
-    button: "Falar com a Monvela no WhatsApp",
+      "Conte sobre o seu negócio e receba uma ideia inicial para o seu projeto. Atendimento direto pelo WhatsApp, sem compromisso.",
+    button: "Falar agora no WhatsApp",
   },
   footer: {
     positioning:
-      "Sites profissionais para levar negócios locais além da fachada.",
-    emailFallback: "E-mail em configuração",
+      "Presença digital para negócios locais — do site à divulgação, medição e gestão.",
+    emailFallback: "E-mail em breve",
     legal: "Todos os direitos reservados.",
     signature: "Presença local. Alcance digital.",
   },

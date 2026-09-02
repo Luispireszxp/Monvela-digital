@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { submitLead, type LeadFormState } from "@/app/actions";
 import { siteConfig } from "@/content/site";
+import { WhatsAppLink } from "./whatsapp-link";
 
 const initialState: LeadFormState = { status: "idle" };
 const { contactSection: content } = siteConfig;
@@ -17,14 +18,9 @@ export function Contact() {
           <p className="eyebrow">{content.eyebrow}</p>
           <h2 id="contact-title">{content.title}</h2>
           <p className="section-description">{content.description}</p>
-          <a
-            className="text-link contact-whatsapp"
-            href={siteConfig.whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <WhatsAppLink source="contact" className="text-link contact-whatsapp">
             {content.whatsappLabel} <span aria-hidden="true">↗</span>
-          </a>
+          </WhatsAppLink>
         </div>
 
         <form className="contact-form" action={formAction} noValidate>

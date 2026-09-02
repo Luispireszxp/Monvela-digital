@@ -1,29 +1,59 @@
+import Image from "next/image";
 import { siteConfig } from "@/content/site";
-import { getConcepts } from "@/lib/content";
 import { SectionHeading } from "./section-heading";
 
-export async function ConceptProjects() {
-  const concepts = await getConcepts();
+/**
+ * Projetos-conceito — direção visual, não clientes reais.
+ *
+ * Enquanto `coverImage` / `desktopPreview` / `mobilePreview` estiverem vazios,
+ * o cartão mostra um marcador discreto (sem imagem quebrada). O botão "Conhecer
+ * o projeto" fica preparado: quando existir uma página de projeto, troque o
+ * `<span>` por um `<Link href=...>`.
+ */
+export function ConceptProjects() {
+  const { conceptsSection, concepts } = siteConfig;
 
   return (
-    <section id="trabalho" className="section concepts" aria-labelledby="concepts-title">
+    <section id="projetos" className="section concepts" aria-labelledby="concepts-title">
       <div className="shell">
         <SectionHeading
           id="concepts-title"
-          eyebrow={siteConfig.conceptsSection.eyebrow}
-          title={siteConfig.conceptsSection.title}
-          description={siteConfig.conceptsSection.description}
+          eyebrow={conceptsSection.eyebrow}
+          title={conceptsSection.title}
+          description={conceptsSection.description}
         />
-        <div className="concept-list">
+
+        <div className="concept-grid">
           {concepts.map((concept) => (
-            <article className="concept-row" key={concept.segment}>
-              <span>{concept.number}</span>
-              <h3>{concept.segment}</h3>
-              <p>{concept.idea}</p>
-              <i aria-hidden="true">↗</i>
+            <article className="concept-card" key={concept.name}>
+              <div className="concept-cover">
+                {concept.coverImage ? (
+                  <Image
+                    src={concept.coverImage}
+                    alt={`Capa do projeto-conceito ${concept.name}`}
+                    fill
+                    sizes="(max-width: 900px) 100vw, 33vw"
+                  />
+                ) : (
+                  <span className="concept-cover-placeholder" aria-hidden="true">
+                    {concept.segment}
+                  </span>
+                )}
+                <p className="concept-badge">Projeto-conceito</p>
+              </div>
+              <div className="concept-body">
+                <p className="concept-segment">{concept.segment}</p>
+                <h3>{concept.name}</h3>
+                <p className="concept-description">{concept.description}</p>
+                <span className="concept-cta" aria-disabled="true">
+                  {conceptsSection.ctaLabel} <em>· em breve</em>
+                </span>
+              </div>
             </article>
           ))}
         </div>
+
+        <p className="concept-disclaimer">{conceptsSection.disclaimer}</p>
       </div>
     </section>
   );

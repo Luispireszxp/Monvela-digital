@@ -1,4 +1,5 @@
 import { siteConfig } from "@/content/site";
+import { WhatsAppLink } from "./whatsapp-link";
 
 export function FinalCTA() {
   return (
@@ -7,7 +8,9 @@ export function FinalCTA() {
         <p className="eyebrow">{siteConfig.finalCta.eyebrow}</p>
         <h2 id="cta-title">{siteConfig.finalCta.title}</h2>
         <p>{siteConfig.finalCta.description}</p>
-        <a className="button" href={siteConfig.whatsappUrl} target="_blank" rel="noopener noreferrer">{siteConfig.finalCta.button} <span aria-hidden="true">↗</span></a>
+        <WhatsAppLink source="final-cta" className="button">
+          {siteConfig.finalCta.button} <span aria-hidden="true">↗</span>
+        </WhatsAppLink>
       </div>
     </section>
   );

@@ -2,22 +2,32 @@ import { siteConfig } from "@/content/site";
 import { env } from "@/lib/env";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 
-export type ServiceItem = { title: string; description: string };
+export type Pillar = {
+  title: string;
+  description: string;
+  note: string | null;
+  points: string[];
+};
 export type FaqItem = { question: string; answer: string };
-export type ConceptItem = { number: string; segment: string; idea: string };
 
 /**
- * Conteúdo das seções Serviços, Dúvidas e Projetos-conceito.
+ * Conteúdo editável das seções Solução (pilares) e Dúvidas (FAQ).
  *
- * Lê do Supabase (tabelas `site_*`, só linhas publicadas, ordenadas por
- * `position`). Se o Supabase não estiver configurado, a query falhar ou vier
- * vazia, cai no conteúdo estático de `src/content/site.ts` — o site nunca fica
- * sem essas seções.
+ * Lê do Supabase (tabelas `site_services` / `site_faqs`, só linhas publicadas,
+ * ordenadas por `position`). Se o Supabase não estiver configurado, a query
+ * falhar ou vier vazia, cai no conteúdo estático de `src/content/site.ts` — o
+ * site nunca fica sem essas seções. As linhas do banco são mantidas em sincronia
+ * com o `site.ts` por migration.
+ *
+ * Os projetos-conceito passaram a ser estáticos (`siteConfig.concepts`), porque
+ * ganharam campos — capa, previews — que a tabela `site_concepts` não comporta.
  */
 
-const fallbackServices: ServiceItem[] = siteConfig.services.map((s) => ({
-  title: s.title,
-  description: s.description,
+const fallbackPillars: Pillar[] = siteConfig.solution.pillars.map((p) => ({
+  title: p.title,
+  description: p.description,
+  note: "note" in p ? p.note : null,
+  points: "points" in p ? [...p.points] : [],
 }));
 
 const fallbackFaqs: FaqItem[] = siteConfig.faqs.map((f) => ({
@@ -25,24 +35,23 @@ const fallbackFaqs: FaqItem[] = siteConfig.faqs.map((f) => ({
   answer: f.answer,
 }));
 
-const fallbackConcepts: ConceptItem[] = siteConfig.concepts.map((c) => ({
-  number: c.number,
-  segment: c.segment,
-  idea: c.idea,
-}));
-
-export async function getServices(): Promise<ServiceItem[]> {
-  if (!env.hasSupabase) return fallbackServices;
+export async function getPillars(): Promise<Pillar[]> {
+  if (!env.hasSupabase) return fallbackPillars;
   try {
     const { data, error } = await getSupabaseServerClient()
       .from("site_services")
-      .select("title, description")
+      .select("title, description, note, points")
       .eq("is_published", true)
       .order("position", { ascending: true });
-    if (error || !data?.length) return fallbackServices;
-    return data.map((r) => ({ title: r.title, description: r.description }));
+    if (error || !data?.length) return fallbackPillars;
+    return data.map((r) => ({
+      title: r.title,
+      description: r.description,
+      note: r.note ?? null,
+      points: Array.isArray(r.points) ? r.points : [],
+    }));
   } catch {
-    return fallbackServices;
+    return fallbackPillars;
   }
 }
 
@@ -58,24 +67,5 @@ export async function getFaqs(): Promise<FaqItem[]> {
     return data.map((r) => ({ question: r.question, answer: r.answer }));
   } catch {
     return fallbackFaqs;
-  }
-}
-
-export async function getConcepts(): Promise<ConceptItem[]> {
-  if (!env.hasSupabase) return fallbackConcepts;
-  try {
-    const { data, error } = await getSupabaseServerClient()
-      .from("site_concepts")
-      .select("number, segment, idea")
-      .eq("is_published", true)
-      .order("position", { ascending: true });
-    if (error || !data?.length) return fallbackConcepts;
-    return data.map((r) => ({
-      number: r.number,
-      segment: r.segment,
-      idea: r.idea,
-    }));
-  } catch {
-    return fallbackConcepts;
   }
 }

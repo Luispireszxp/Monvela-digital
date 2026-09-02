@@ -21,7 +21,7 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.siteUrl),
   title: {
-    default: "Monvela Digital | Sites profissionais para negócios locais",
+    default: "Monvela Digital | Presença digital para negócios locais",
     template: "%s | Monvela Digital",
   },
   description: siteConfig.description,
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
         url: "/images/hero-concept.png",
         width: 1672,
         height: 940,
-        alt: "Monvela Digital — seu negócio, além da fachada",
+        alt: "Monvela Digital — presença digital para negócios locais",
       },
     ],
   },
