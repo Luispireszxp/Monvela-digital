@@ -68,11 +68,11 @@ export interface SiteConfig {
     readonly segments: readonly string[];
     readonly flow: readonly string[];
   };
-  readonly googleStat: {
+  readonly digitalContext: {
     readonly eyebrow: string;
-    readonly value: string;
-    readonly label: string;
-    readonly complement: string;
+    readonly title: string;
+    readonly journeyTitle: string;
+    readonly closing: string;
     readonly sourceLabel: string;
     readonly sourceUrl: string;
   };
@@ -210,13 +210,12 @@ export const siteConfig = {
     ],
     flow: ["Pesquisa", "Compara", "Decide"],
   },
-  googleStat: {
-    eyebrow: "Contexto de mercado",
-    value: "87,5%",
-    label:
-      "Participação do Google entre os mecanismos de busca utilizados no Brasil em agosto de 2026.",
-    complement:
-      "Estar presente na internet ajuda sua empresa a participar do momento em que o cliente pesquisa e compara suas opções.",
+  digitalContext: {
+    eyebrow: "Contexto digital",
+    title: "Onde seus clientes procuram?",
+    journeyTitle: "Sua presença precisa acompanhar toda a jornada",
+    closing:
+      "A Monvela conecta seu negócio aos canais onde seus clientes pesquisam, descobrem e conversam.",
     sourceLabel: "Fonte: StatCounter Global Stats — agosto de 2026.",
     sourceUrl: "https://gs.statcounter.com/search-engine-market-share/all/brazil",
   },

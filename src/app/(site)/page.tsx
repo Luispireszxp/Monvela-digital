@@ -2,9 +2,9 @@ import { About } from "@/components/about";
 import { ConceptProjects } from "@/components/concept-projects";
 import { Contact } from "@/components/contact";
 import { Cycle } from "@/components/cycle";
+import { DigitalContext } from "@/components/digital-context";
 import { FAQ } from "@/components/faq";
 import { FinalCTA } from "@/components/final-cta";
-import { GoogleStat } from "@/components/google-stat";
 import { Hero } from "@/components/hero";
 import { Partners } from "@/components/partners";
 import { Problem } from "@/components/problem";
@@ -22,7 +22,7 @@ export default function Home() {
       <Hero />
       <Problem />
       <SearchStart />
-      <GoogleStat />
+      <DigitalContext />
       <Solution />
       <Cycle />
       <ConceptProjects />
