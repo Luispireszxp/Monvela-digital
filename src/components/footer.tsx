@@ -10,11 +10,11 @@ export function Footer() {
           <p>{siteConfig.footer.positioning}</p>
         </div>
         <nav aria-label="Links do rodapé">
-          {siteConfig.navigation.map((item) => <Link href={`/${item.href}`} key={item.href}>{item.label}</Link>)}
+          {siteConfig.navigation.map((item) => <Link href={item.href} key={item.href}>{item.label}</Link>)}
           <Link href="/politica-de-privacidade">Política de privacidade</Link>
         </nav>
         <div className="footer-contact">
-          <a href={siteConfig.whatsappUrl} target="_blank" rel="noreferrer">WhatsApp</a>
+          <a href={siteConfig.whatsappUrl} target="_blank" rel="noopener noreferrer">WhatsApp</a>
           {siteConfig.contactEmail ? <a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a> : <span>{siteConfig.footer.emailFallback}</span>}
         </div>
       </div>

@@ -13,7 +13,6 @@ export function Header() {
         <Link className="wordmark" href="/" aria-label="Monvela Digital — início">
           <span className="wordmark-dot" aria-hidden="true" />
           <span>{siteConfig.name}</span>
-          <span className="sr-only">Local reservado para a logo oficial</span>
         </Link>
 
         <nav className="desktop-nav" aria-label="Navegação principal">
@@ -24,7 +23,7 @@ export function Header() {
           ))}
         </nav>
 
-        <a className="button button-small header-cta" href={siteConfig.whatsappUrl} target="_blank" rel="noreferrer">
+        <a className="button button-small header-cta" href={siteConfig.whatsappUrl} target="_blank" rel="noopener noreferrer">
           Vamos conversar
         </a>
 
@@ -48,7 +47,7 @@ export function Header() {
               {item.label}
             </Link>
           ))}
-          <a className="button" href={siteConfig.whatsappUrl} target="_blank" rel="noreferrer">
+          <a className="button" href={siteConfig.whatsappUrl} target="_blank" rel="noopener noreferrer">
             Vamos conversar
           </a>
         </nav>

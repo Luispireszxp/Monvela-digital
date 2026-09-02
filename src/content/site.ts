@@ -1,5 +1,106 @@
 import { env } from "@/lib/env";
 
+type NavItem = { readonly label: string; readonly href: string };
+type SectionIntro = {
+  readonly eyebrow: string;
+  readonly title: string;
+  readonly description: string;
+};
+type ServiceItem = { readonly title: string; readonly description: string };
+type ConceptItem = {
+  readonly number: string;
+  readonly segment: string;
+  readonly idea: string;
+};
+type ProcessStep = {
+  readonly step: string;
+  readonly title: string;
+  readonly text: string;
+};
+type FaqItem = { readonly question: string; readonly answer: string };
+
+export interface SiteConfig {
+  readonly name: string;
+  readonly shortName: string;
+  readonly description: string;
+  readonly positioning: string;
+  readonly siteUrl: string;
+  readonly contactEmail: string;
+  readonly whatsappNumber: string;
+  readonly hasWhatsapp: boolean;
+  readonly whatsappMessage: string;
+  readonly whatsappUrl: string;
+  readonly navigation: readonly NavItem[];
+  readonly hero: {
+    readonly eyebrow: string;
+    readonly titleStart: string;
+    readonly titleEnd: string;
+    readonly primaryCta: string;
+    readonly secondaryCta: string;
+    readonly note: string;
+    readonly imageAlt: string;
+    readonly imageNote: string;
+  };
+  readonly problem: {
+    readonly eyebrow: string;
+    readonly title: string;
+    readonly paragraphs: readonly string[];
+  };
+  readonly howItWorks: {
+    readonly eyebrow: string;
+    readonly title: string;
+    readonly description: string;
+    readonly accessibleLabel: string;
+  };
+  readonly journey: readonly string[];
+  readonly servicesSection: SectionIntro;
+  readonly services: readonly ServiceItem[];
+  readonly conceptsSection: SectionIntro;
+  readonly concepts: readonly ConceptItem[];
+  readonly processSection: SectionIntro;
+  readonly process: readonly ProcessStep[];
+  readonly about: {
+    readonly eyebrow: string;
+    readonly title: string;
+    readonly paragraphs: readonly string[];
+    readonly values: readonly string[];
+  };
+  readonly faqSection: {
+    readonly eyebrow: string;
+    readonly title: string;
+  };
+  readonly faqs: readonly FaqItem[];
+  readonly contactSection: {
+    readonly eyebrow: string;
+    readonly title: string;
+    readonly description: string;
+    readonly whatsappLabel: string;
+    readonly submitLabel: string;
+    readonly fields: {
+      readonly name: string;
+      readonly contact: string;
+      readonly business: string;
+      readonly segment: string;
+      readonly message: string;
+      readonly optional: string;
+    };
+    readonly success: string;
+    readonly error: string;
+  };
+  readonly finalCta: {
+    readonly eyebrow: string;
+    readonly title: string;
+    readonly description: string;
+    readonly button: string;
+  };
+  readonly footer: {
+    readonly positioning: string;
+    readonly emailFallback: string;
+    readonly legal: string;
+    readonly signature: string;
+  };
+}
+
 const whatsappMessage =
   "Olá! Conheci a Monvela e gostaria de receber uma ideia inicial para o site do meu negócio.";
 
@@ -16,11 +117,11 @@ export const siteConfig = {
   whatsappMessage,
   whatsappUrl: `https://wa.me/${env.whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`,
   navigation: [
-    { label: "Trabalho", href: "#trabalho" },
-    { label: "Como funciona", href: "#como-funciona" },
-    { label: "Sobre", href: "#sobre" },
-    { label: "Dúvidas", href: "#duvidas" },
-    { label: "Contato", href: "#contato" },
+    { label: "Trabalho", href: "/#trabalho" },
+    { label: "Como funciona", href: "/#como-funciona" },
+    { label: "Sobre", href: "/#sobre" },
+    { label: "Dúvidas", href: "/#duvidas" },
+    { label: "Contato", href: "/#contato" },
   ],
   hero: {
     eyebrow: "Presença digital para negócios locais",
@@ -242,4 +343,4 @@ export const siteConfig = {
     legal: "Todos os direitos reservados.",
     signature: "Presença local. Alcance digital.",
   },
-} as const;
+} as const satisfies SiteConfig;

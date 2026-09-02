@@ -24,7 +24,7 @@ export function Hero() {
           </h1>
           <p className="hero-description">{siteConfig.description}</p>
           <div className="hero-actions">
-            <a className="button" href={siteConfig.whatsappUrl} target="_blank" rel="noreferrer">
+            <a className="button" href={siteConfig.whatsappUrl} target="_blank" rel="noopener noreferrer">
               {siteConfig.hero.primaryCta} <span aria-hidden="true">↗</span>
             </a>
             <Link className="text-link" href="#como-funciona">

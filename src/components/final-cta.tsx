@@ -7,7 +7,7 @@ export function FinalCTA() {
         <p className="eyebrow">{siteConfig.finalCta.eyebrow}</p>
         <h2 id="cta-title">{siteConfig.finalCta.title}</h2>
         <p>{siteConfig.finalCta.description}</p>
-        <a className="button" href={siteConfig.whatsappUrl} target="_blank" rel="noreferrer">{siteConfig.finalCta.button} <span aria-hidden="true">↗</span></a>
+        <a className="button" href={siteConfig.whatsappUrl} target="_blank" rel="noopener noreferrer">{siteConfig.finalCta.button} <span aria-hidden="true">↗</span></a>
       </div>
     </section>
   );
