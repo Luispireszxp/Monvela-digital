@@ -1,10 +1,7 @@
+import { env } from "@/lib/env";
+
 const whatsappMessage =
   "Olá! Conheci a Monvela e gostaria de receber uma ideia inicial para o site do meu negócio.";
-
-const whatsappNumber = (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "").replace(
-  /\D/g,
-  "",
-);
 
 export const siteConfig = {
   name: "Monvela Digital",
@@ -12,16 +9,18 @@ export const siteConfig = {
   description:
     "Criamos sites profissionais para ajudar negócios locais a apresentar seu valor e facilitar o contato com novos clientes.",
   positioning: "Seu negócio, além da fachada.",
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
-  contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "",
-  whatsappNumber,
+  siteUrl: env.siteUrl,
+  contactEmail: env.contactEmail,
+  whatsappNumber: env.whatsappNumber,
+  hasWhatsapp: env.hasWhatsapp,
   whatsappMessage,
-  whatsappUrl: `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`,
+  whatsappUrl: `https://wa.me/${env.whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`,
   navigation: [
     { label: "Trabalho", href: "#trabalho" },
     { label: "Como funciona", href: "#como-funciona" },
     { label: "Sobre", href: "#sobre" },
     { label: "Dúvidas", href: "#duvidas" },
+    { label: "Contato", href: "#contato" },
   ],
   hero: {
     eyebrow: "Presença digital para negócios locais",
@@ -211,6 +210,24 @@ export const siteConfig = {
         "O projeto será preparado tecnicamente para mecanismos de busca. Porém, indexação e posicionamento dependem de fatores como tempo, conteúdo, concorrência e critérios dos próprios buscadores; por isso, não podem ser garantidos.",
     },
   ],
+  contactSection: {
+    eyebrow: "Fale com a Monvela",
+    title: "Conte sobre o seu negócio.",
+    description:
+      "Deixe seu contato e um resumo do que você precisa. A Monvela responde com uma ideia inicial para o projeto, sem compromisso.",
+    whatsappLabel: "Prefiro falar pelo WhatsApp",
+    submitLabel: "Enviar",
+    fields: {
+      name: "Nome",
+      contact: "Telefone, e-mail ou WhatsApp",
+      business: "Nome do negócio",
+      segment: "Segmento",
+      message: "Como podemos ajudar?",
+      optional: "opcional",
+    },
+    success: "Recebido! A Monvela vai responder em breve.",
+    error: "Não foi possível enviar agora. Tente novamente ou fale pelo WhatsApp.",
+  },
   finalCta: {
     eyebrow: "Seu próximo passo",
     title: "A próxima presença marcante pode ser a sua.",

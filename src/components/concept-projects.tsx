@@ -1,7 +1,10 @@
 import { siteConfig } from "@/content/site";
+import { getConcepts } from "@/lib/content";
 import { SectionHeading } from "./section-heading";
 
-export function ConceptProjects() {
+export async function ConceptProjects() {
+  const concepts = await getConcepts();
+
   return (
     <section id="trabalho" className="section concepts" aria-labelledby="concepts-title">
       <div className="shell">
@@ -12,7 +15,7 @@ export function ConceptProjects() {
           description={siteConfig.conceptsSection.description}
         />
         <div className="concept-list">
-          {siteConfig.concepts.map((concept) => (
+          {concepts.map((concept) => (
             <article className="concept-row" key={concept.segment}>
               <span>{concept.number}</span>
               <h3>{concept.segment}</h3>

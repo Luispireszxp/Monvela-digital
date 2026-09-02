@@ -40,3 +40,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# design canvas (arquivo gerado pesado)
+/design/monvela-digital-home.html

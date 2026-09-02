@@ -1,7 +1,10 @@
 import { siteConfig } from "@/content/site";
+import { getFaqs } from "@/lib/content";
 import { SectionHeading } from "./section-heading";
 
-export function FAQ() {
+export async function FAQ() {
+  const faqs = await getFaqs();
+
   return (
     <section id="duvidas" className="section light-section faq" aria-labelledby="faq-title">
       <div className="shell split-section">
@@ -12,7 +15,7 @@ export function FAQ() {
           title={siteConfig.faqSection.title}
         />
         <div className="faq-list">
-          {siteConfig.faqs.map((item) => (
+          {faqs.map((item) => (
             <details key={item.question}>
               <summary>{item.question}<span aria-hidden="true">+</span></summary>
               <p>{item.answer}</p>

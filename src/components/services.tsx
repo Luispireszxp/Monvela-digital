@@ -1,7 +1,10 @@
 import { siteConfig } from "@/content/site";
+import { getServices } from "@/lib/content";
 import { SectionHeading } from "./section-heading";
 
-export function Services() {
+export async function Services() {
+  const services = await getServices();
+
   return (
     <section className="section light-section" aria-labelledby="services-title">
       <div className="shell split-section">
@@ -13,7 +16,7 @@ export function Services() {
           description={siteConfig.servicesSection.description}
         />
         <div className="service-list">
-          {siteConfig.services.map((service, index) => (
+          {services.map((service, index) => (
             <article className="service-row" key={service.title}>
               <span>{String(index + 1).padStart(2, "0")}</span>
               <div>

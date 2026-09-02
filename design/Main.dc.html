@@ -1,0 +1,291 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap">
+  <style>
+    :root{
+      --ink:#030a12;--ink-soft:#0b1723;--ivory:#f4f1ea;--paper:#fffdf8;
+      --orange:#ff7a00;--orange-bright:#ff9638;--muted-dark:#9da7b1;--muted-light:#58616a;
+      --line-dark:rgba(244,241,234,0.16);--line-light:rgba(3,10,18,0.14);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--ink);color:var(--ivory);
+      font-family:'Geist',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
+      -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+    h1,h2,h3,p,ol,ul{margin:0;padding:0}
+    li{list-style:none}
+    a{color:inherit;text-decoration:none}
+    strong{font-weight:inherit}
+    .mono{font-family:'Geist Mono',ui-monospace,'Cascadia Mono',Menlo,monospace}
+    .shell{width:min(100% - 4rem,76rem);margin-inline:auto}
+    .eyebrow{margin:0 0 1.4rem;color:var(--orange-bright);
+      font-family:'Geist Mono',ui-monospace,Menlo,monospace;font-size:0.75rem;
+      letter-spacing:0.13em;text-transform:uppercase}
+    .eyebrow-light{color:#c55200}
+    .h2{font-size:clamp(2.5rem,5.8vw,5.5rem);font-weight:560;line-height:0.98;letter-spacing:-0.065em}
+    .section-desc{max-width:41rem;margin:1.75rem 0 0;color:var(--muted-dark);
+      font-size:clamp(1rem,1.6vw,1.18rem);line-height:1.7}
+    .section-desc.on-light{color:var(--muted-light)}
+    .heading{max-width:51rem;margin-bottom:clamp(3.5rem,7vw,6rem)}
+    .btn{display:inline-flex;min-height:3.4rem;align-items:center;justify-content:center;
+      gap:0.75rem;border:1px solid var(--orange);border-radius:999px;background:var(--orange);
+      color:#160a00;padding:0.85rem 1.4rem;font-size:0.91rem;font-weight:700}
+    .btn-sm{min-height:2.75rem;padding:0.65rem 1rem;font-size:0.82rem}
+    .text-link{display:inline-flex;gap:0.7rem;align-items:center;color:#e5e3de;font-size:0.92rem;font-weight:600}
+    .wordmark{display:inline-flex;align-items:center;gap:0.7rem;font-size:0.95rem;font-weight:650;letter-spacing:-0.02em}
+    .dot{width:0.65rem;height:0.65rem;border-radius:50%;background:var(--orange);box-shadow:0 0 1.5rem rgba(255,122,0,0.55)}
+    a:hover{color:var(--orange-bright)}
+
+    /* services */
+    .svc-row{display:grid;grid-template-columns:3rem 1fr;gap:1rem;border-bottom:1px solid var(--line-light);padding-block:1.5rem}
+    .svc-num{color:#b14a00;font-size:0.68rem}
+    .svc-h{font-size:clamp(1.3rem,2.1vw,1.8rem);font-weight:580;letter-spacing:-0.035em}
+    .svc-p{max-width:37rem;margin:0.65rem 0 0;color:var(--muted-light);line-height:1.65}
+
+    /* concept projects */
+    .cc-row{display:grid;grid-template-columns:4rem 0.8fr 1.2fr 2rem;align-items:center;gap:1.5rem;min-height:8rem;border-bottom:1px solid var(--line-dark)}
+    .cc-num{color:var(--orange-bright);font-size:0.68rem}
+    .cc-h{font-size:clamp(1.45rem,2.8vw,2.35rem);font-weight:530;letter-spacing:-0.045em}
+    .cc-p{max-width:38rem;color:var(--muted-dark);line-height:1.6}
+    .cc-i{color:var(--orange-bright);font-style:normal;font-size:1.3rem}
+
+    /* process */
+    .pr-li{min-height:18rem;border-right:1px solid var(--line-light);padding:1.5rem 1.25rem}
+    .pr-num{color:#b14a00;font-size:0.7rem}
+    .pr-h{margin:5rem 0 0;font-size:1.2rem;font-weight:620;line-height:1.2;letter-spacing:-0.025em}
+    .pr-p{margin:0.85rem 0 0;color:var(--muted-light);font-size:0.88rem;line-height:1.6}
+
+    /* journey */
+    .jstep{position:relative;min-height:12rem;display:flex;flex-direction:column;justify-content:space-between;border-right:1px solid var(--line-dark);padding:1.25rem}
+    .jnum{color:var(--orange-bright);font-size:0.7rem}
+    .jstrong{max-width:8ch;font-size:clamp(1.35rem,2.3vw,2rem);font-weight:540;line-height:1.05;letter-spacing:-0.045em}
+    .jarrow{position:absolute;right:-0.72rem;bottom:1.25rem;z-index:2;display:grid;place-items:center;width:1.45rem;height:1.45rem;border-radius:50%;background:var(--orange);color:var(--ink);font-style:normal;font-size:0.75rem}
+
+    /* faq */
+    .faq-row{border-bottom:1px solid var(--line-light)}
+    .faq-sum{display:flex;align-items:center;justify-content:space-between;gap:2rem;padding:1.45rem 0;font-size:1.02rem;font-weight:600}
+    .faq-plus{color:#b14a00;font-size:1.5rem;font-weight:350}
+    .faq-ans{max-width:41rem;margin:-0.15rem 0 1.5rem;color:var(--muted-light);line-height:1.7}
+
+    .val{border:1px solid var(--line-dark);border-radius:999px;padding:0.65rem 0.9rem;color:var(--ivory);font-size:0.76rem}
+  </style>
+</helmet>
+
+<div id="page" style="position:relative;width:1440px;background:var(--ink);overflow:hidden">
+
+  <!-- ===== HEADER ===== -->
+  <header style="position:sticky;top:0;z-index:50;min-height:5rem;display:flex;align-items:center;border-bottom:1px solid rgba(244,241,234,0.1);background:rgba(3,10,18,0.82);backdrop-filter:blur(18px)">
+    <div class="shell" style="display:flex;align-items:center;justify-content:space-between;gap:2rem">
+      <a href="#" class="wordmark"><span class="dot" aria-hidden="true"></span><span>Monvela Digital</span></a>
+      <nav style="display:flex;align-items:center;gap:2.5rem;margin-left:auto;color:#cbd0d4;font-size:0.86rem">
+        <a href="#trabalho">Trabalho</a>
+        <a href="#como-funciona">Como funciona</a>
+        <a href="#sobre">Sobre</a>
+        <a href="#duvidas">Dúvidas</a>
+      </nav>
+      <a class="btn btn-sm" href="#">Vamos conversar</a>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section style="position:relative;overflow:hidden;padding:10rem 0 6rem;background:radial-gradient(circle at 72% 40%,rgba(255,122,0,0.08),transparent 26rem),linear-gradient(180deg,#030a12 0%,#06111c 100%)">
+    <div aria-hidden="true" style="position:absolute;inset:0;opacity:0.24;background-image:linear-gradient(rgba(255,255,255,0.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.035) 1px,transparent 1px);background-size:5rem 5rem;-webkit-mask-image:linear-gradient(to bottom,black,transparent 88%);mask-image:linear-gradient(to bottom,black,transparent 88%)"></div>
+    <div aria-hidden="true" style="position:absolute;inset:0;background:radial-gradient(38rem 30rem at 82% 44%,rgba(255,150,80,0.16),transparent 62%)"></div>
+    <div aria-hidden="true" style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(3,10,18,0.98) 0%,rgba(3,10,18,0.86) 39%,rgba(3,10,18,0.26) 72%,rgba(3,10,18,0.12) 100%)"></div>
+    <div class="shell" style="position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1.04fr) minmax(22rem,0.96fr);align-items:center;gap:clamp(3rem,8vw,8rem)">
+      <div style="padding-block:2rem">
+        <p class="eyebrow">Presença digital para negócios locais</p>
+        <h1 style="max-width:11ch;font-size:clamp(3.6rem,7.8vw,7.25rem);font-weight:580;line-height:0.94;letter-spacing:-0.075em">Seu negócio,<br><span style="color:#aeb7bf">além da fachada.</span></h1>
+        <p style="max-width:38rem;margin:2rem 0 0;color:#bac2c8;font-size:clamp(1.08rem,2vw,1.35rem);line-height:1.55">Criamos sites profissionais para ajudar negócios locais a apresentar seu valor e facilitar o contato com novos clientes.</p>
+        <div style="display:flex;align-items:center;gap:1.6rem;margin-top:2.2rem">
+          <a class="btn" href="#">Receba uma ideia gratuita <span aria-hidden="true">↗</span></a>
+          <a class="text-link" href="#como-funciona">Veja como funciona <span aria-hidden="true">↓</span></a>
+        </div>
+        <p style="margin:1.2rem 0 0;color:#77838d;font-size:0.78rem">Uma ideia inicial para o seu projeto, sem compromisso.</p>
+      </div>
+    </div>
+    <p class="mono" style="position:absolute;z-index:2;right:1rem;bottom:1rem;margin:0;color:rgba(244,241,234,0.48);font-size:0.58rem;line-height:1.4;letter-spacing:0.05em;text-transform:uppercase">Visual conceitual provisório · substituir por imagem definitiva em public/images</p>
+  </section>
+
+  <!-- ===== PROBLEMA ===== -->
+  <section style="padding-block:clamp(5.5rem,10vw,9.5rem);background:var(--ivory);color:var(--ink)">
+    <div class="shell" style="display:grid;grid-template-columns:minmax(8rem,0.36fr) minmax(0,1.64fr);gap:clamp(2rem,7vw,7rem)">
+      <p class="eyebrow eyebrow-light" style="margin:0">O ponto de partida</p>
+      <div>
+        <h2 class="h2" style="max-width:15ch">Seu negócio já existe. Agora ele precisa ser encontrado.</h2>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(1.5rem,5vw,5rem);max-width:55rem;margin-top:3rem;color:#4a545d;font-size:1.02rem;line-height:1.75">
+          <p>Muitos bons negócios já têm qualidade, clientes e uma reputação construída no dia a dia.</p>
+          <p>Mas, quando alguém procura por eles no celular, ainda encontra poucas informações — ou nenhuma presença que represente o seu verdadeiro valor.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== COMO FUNCIONA (jornada) ===== -->
+  <section id="como-funciona" style="padding-block:clamp(5.5rem,10vw,9.5rem);background:var(--ink)">
+    <div class="shell">
+      <div class="heading">
+        <p class="eyebrow">Como a Monvela trabalha</p>
+        <h2 class="h2">Do espaço físico para uma presença que continua falando pelo seu negócio.</h2>
+        <p class="section-desc">A Monvela organiza as informações da empresa, desenvolve sua presença digital e cria caminhos simples para o público entrar em contato.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line-dark);border-bottom:1px solid var(--line-dark)">
+        <div class="jstep"><span class="jnum mono">01</span><strong class="jstrong">Seu negócio</strong><i class="jarrow" aria-hidden="true">→</i></div>
+        <div class="jstep"><span class="jnum mono">02</span><strong class="jstrong">Monvela</strong><i class="jarrow" aria-hidden="true">→</i></div>
+        <div class="jstep"><span class="jnum mono">03</span><strong class="jstrong">Internet</strong><i class="jarrow" aria-hidden="true">→</i></div>
+        <div class="jstep" style="border-right:0"><span class="jnum mono">04</span><strong class="jstrong">Público</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SERVIÇOS ===== -->
+  <section style="padding-block:clamp(5.5rem,10vw,9.5rem);background:var(--ivory);color:var(--ink)">
+    <div class="shell" style="display:grid;grid-template-columns:minmax(17rem,0.75fr) minmax(0,1.25fr);gap:clamp(3rem,9vw,9rem);align-items:start">
+      <div style="position:sticky;top:7rem">
+        <p class="eyebrow eyebrow-light">Soluções essenciais</p>
+        <h2 class="h2">O necessário para o seu negócio começar bem na internet.</h2>
+        <p class="section-desc on-light">Sem pacotes inflados: uma base objetiva, profissional e fácil de usar.</p>
+      </div>
+      <div style="border-top:1px solid var(--line-light)">
+        <article class="svc-row"><span class="svc-num mono">01</span><div><h3 class="svc-h">Sites profissionais</h3><p class="svc-p">Uma apresentação clara e confiável, feita para valorizar o que torna o seu negócio único.</p></div></article>
+        <article class="svc-row"><span class="svc-num mono">02</span><div><h3 class="svc-h">Design responsivo</h3><p class="svc-p">Páginas que se adaptam ao celular, tablet e computador sem perder qualidade ou legibilidade.</p></div></article>
+        <article class="svc-row"><span class="svc-num mono">03</span><div><h3 class="svc-h">Integração com WhatsApp</h3><p class="svc-p">Caminhos diretos para transformar interesse em conversa, com uma mensagem inicial já preparada.</p></div></article>
+        <article class="svc-row"><span class="svc-num mono">04</span><div><h3 class="svc-h">Localização e mapa</h3><p class="svc-p">Endereço, horários e localização organizados para facilitar a visita e o contato do cliente.</p></div></article>
+        <article class="svc-row"><span class="svc-num mono">05</span><div><h3 class="svc-h">Domínio e hospedagem</h3><p class="svc-p">Orientação para escolher o endereço, a hospedagem e os recursos necessários para colocar o site no ar.</p></div></article>
+        <article class="svc-row"><span class="svc-num mono">06</span><div><h3 class="svc-h">Suporte para publicação</h3><p class="svc-p">Acompanhamento até a publicação, com manutenção posterior combinada conforme a necessidade.</p></div></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PROJETOS-CONCEITO ===== -->
+  <section id="trabalho" style="padding-block:clamp(5.5rem,10vw,9.5rem);overflow:hidden;background:linear-gradient(145deg,#07131e,var(--ink) 60%)">
+    <div class="shell">
+      <div class="heading">
+        <p class="eyebrow">Projetos-conceito</p>
+        <h2 class="h2">Possibilidades para negócios que movimentam cidades.</h2>
+        <p class="section-desc">Demonstrações de direção criativa para diferentes segmentos. Não representam clientes, contratos ou resultados reais.</p>
+      </div>
+      <div style="border-top:1px solid var(--line-dark)">
+        <article class="cc-row"><span class="cc-num mono">01</span><h3 class="cc-h">Gastronomia</h3><p class="cc-p">Cardápio, ambiente, localização e contato para reservas em uma apresentação convidativa.</p><i class="cc-i" aria-hidden="true">↗</i></article>
+        <article class="cc-row"><span class="cc-num mono">02</span><h3 class="cc-h">Hotelaria</h3><p class="cc-p">Acomodações, estrutura, localização e formas de contato apresentadas com clareza.</p><i class="cc-i" aria-hidden="true">↗</i></article>
+        <article class="cc-row"><span class="cc-num mono">03</span><h3 class="cc-h">Comércio</h3><p class="cc-p">Produtos, diferenciais e endereço reunidos em uma vitrine digital própria.</p><i class="cc-i" aria-hidden="true">↗</i></article>
+        <article class="cc-row"><span class="cc-num mono">04</span><h3 class="cc-h">Serviços profissionais</h3><p class="cc-p">Especialidades, credibilidade e formas de atendimento organizadas sem complicação.</p><i class="cc-i" aria-hidden="true">↗</i></article>
+        <article class="cc-row" style="border-bottom:0"><span class="cc-num mono">05</span><h3 class="cc-h">Setor automotivo</h3><p class="cc-p">Serviços, estrutura da oficina e contato rápido para orçamentos e agendamentos.</p><i class="cc-i" aria-hidden="true">↗</i></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PROCESSO ===== -->
+  <section style="padding-block:clamp(5.5rem,10vw,9.5rem);background:var(--ivory);color:var(--ink)">
+    <div class="shell">
+      <div class="heading">
+        <p class="eyebrow eyebrow-light">Processo</p>
+        <h2 class="h2">Ouvimos. Criamos. Publicamos.</h2>
+        <p class="section-desc on-light">Um caminho direto, com decisões claras e conversa próxima em cada etapa.</p>
+      </div>
+      <ol style="display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--line-light)">
+        <li class="pr-li"><span class="pr-num mono">01</span><h3 class="pr-h">Você conta sobre o negócio</h3><p class="pr-p">Entendemos sua realidade, seus clientes e o que precisa ser apresentado.</p></li>
+        <li class="pr-li"><span class="pr-num mono">02</span><h3 class="pr-h">Preparamos uma ideia inicial</h3><p class="pr-p">Apresentamos uma direção inicial para a conversa — não um site completo ou período de teste.</p></li>
+        <li class="pr-li"><span class="pr-num mono">03</span><h3 class="pr-h">Você analisa a proposta</h3><p class="pr-p">Alinhamos o escopo, esclarecemos dúvidas e combinamos os próximos passos.</p></li>
+        <li class="pr-li"><span class="pr-num mono">04</span><h3 class="pr-h">Criamos o site</h3><p class="pr-p">Transformamos o conteúdo em uma experiência profissional e responsiva.</p></li>
+        <li class="pr-li" style="border-right:0"><span class="pr-num mono">05</span><h3 class="pr-h">Revisamos e publicamos</h3><p class="pr-p">Ajustamos os detalhes finais e acompanhamos a entrada do projeto no ar.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ===== SOBRE ===== -->
+  <section id="sobre" style="position:relative;overflow:hidden;padding-block:clamp(5.5rem,10vw,9.5rem);background:#071522">
+    <div aria-hidden="true" style="position:absolute;width:34rem;height:34rem;right:-15rem;bottom:-20rem;border-radius:50%;background:var(--orange);opacity:0.16;filter:blur(2rem)"></div>
+    <div class="shell" style="position:relative;z-index:1;display:grid;grid-template-columns:1.15fr 0.85fr;gap:clamp(3rem,9vw,9rem)">
+      <div>
+        <p class="eyebrow">Sobre a Monvela</p>
+        <h2 class="h2" style="max-width:12ch">Tecnologia com conversa simples e presença de verdade.</h2>
+      </div>
+      <div style="padding-top:2.8rem;color:#bdc5cb;font-size:1.04rem;line-height:1.75">
+        <p style="margin:0 0 1.5rem">A Monvela nasceu para ajudar empresas e comércios locais a construir uma presença digital profissional, simples e acessível.</p>
+        <p style="margin:0 0 1.5rem">Cada projeto começa com atenção ao negócio real: sua história, seus serviços, seus clientes e a forma como a empresa prefere se comunicar.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:0.65rem;margin-top:2.5rem">
+          <span class="val">Atendimento próximo</span>
+          <span class="val">Projeto personalizado</span>
+          <span class="val">Comunicação direta</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section id="duvidas" style="padding-block:clamp(5.5rem,10vw,9.5rem);background:var(--ivory);color:var(--ink)">
+    <div class="shell" style="display:grid;grid-template-columns:minmax(17rem,0.75fr) minmax(0,1.25fr);gap:clamp(3rem,9vw,9rem);align-items:start">
+      <div style="position:sticky;top:7rem">
+        <p class="eyebrow eyebrow-light">Dúvidas frequentes</p>
+        <h2 class="h2">Antes de começar, vale deixar tudo claro.</h2>
+      </div>
+      <div style="border-top:1px solid var(--line-light)">
+        <div class="faq-row">
+          <div class="faq-sum"><span>O que está incluído na criação do site?</span><span class="faq-plus" style="transform:rotate(45deg)" aria-hidden="true">+</span></div>
+          <p class="faq-ans">O escopo é definido para cada negócio e pode incluir apresentação da empresa, serviços ou produtos, diferenciais, localização, formas de contato, integração com WhatsApp e preparação para publicação.</p>
+        </div>
+        <div class="faq-row"><div class="faq-sum"><span>Preciso já ter um domínio?</span><span class="faq-plus" aria-hidden="true">+</span></div></div>
+        <div class="faq-row"><div class="faq-sum"><span>A Monvela pode ajudar com domínio e hospedagem?</span><span class="faq-plus" aria-hidden="true">+</span></div></div>
+        <div class="faq-row"><div class="faq-sum"><span>O site funciona no celular?</span><span class="faq-plus" aria-hidden="true">+</span></div></div>
+        <div class="faq-row"><div class="faq-sum"><span>Posso solicitar alterações?</span><span class="faq-plus" aria-hidden="true">+</span></div></div>
+        <div class="faq-row"><div class="faq-sum"><span>Quanto tempo demora?</span><span class="faq-plus" aria-hidden="true">+</span></div></div>
+        <div class="faq-row"><div class="faq-sum"><span>Como funciona a ideia inicial gratuita?</span><span class="faq-plus" aria-hidden="true">+</span></div></div>
+        <div class="faq-row" style="border-bottom:0"><div class="faq-sum"><span>O site aparecerá automaticamente no Google?</span><span class="faq-plus" aria-hidden="true">+</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA FINAL ===== -->
+  <section style="position:relative;overflow:hidden;padding-block:clamp(6rem,12vw,11rem);text-align:center;background:radial-gradient(circle at 50% 110%,rgba(255,122,0,0.3),transparent 40%),var(--ink)">
+    <div class="shell" style="display:flex;flex-direction:column;align-items:center">
+      <p class="eyebrow">Seu próximo passo</p>
+      <h2 class="h2" style="max-width:13ch">A próxima presença marcante pode ser a sua.</h2>
+      <p style="max-width:37rem;margin:1.7rem 0 2rem;color:var(--muted-dark);font-size:1.1rem;line-height:1.6">Conte sobre o seu negócio e receba uma ideia inicial para o seu projeto.</p>
+      <a class="btn" href="#">Falar com a Monvela no WhatsApp <span aria-hidden="true">↗</span></a>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer style="border-top:1px solid var(--line-dark);background:#02070c;padding:4rem 0 1.5rem">
+    <div class="shell" style="display:grid;grid-template-columns:1.4fr 0.7fr 0.9fr;gap:3rem">
+      <div>
+        <a href="#" class="wordmark"><span class="dot" aria-hidden="true"></span>Monvela Digital</a>
+        <p style="max-width:24rem;margin:1.4rem 0 0;color:#7f8a94;line-height:1.6">Sites profissionais para levar negócios locais além da fachada.</p>
+      </div>
+      <nav style="display:flex;flex-direction:column;gap:0.85rem;color:#adb5bc;font-size:0.84rem">
+        <a href="#trabalho">Trabalho</a>
+        <a href="#como-funciona">Como funciona</a>
+        <a href="#sobre">Sobre</a>
+        <a href="#duvidas">Dúvidas</a>
+        <a href="#">Política de privacidade</a>
+      </nav>
+      <div style="display:flex;flex-direction:column;gap:0.85rem;color:#adb5bc;font-size:0.84rem">
+        <a href="#">WhatsApp</a>
+        <span>E-mail em configuração</span>
+      </div>
+    </div>
+    <div class="shell" style="display:flex;justify-content:space-between;gap:2rem;margin-top:4rem;border-top:1px solid var(--line-dark);padding-top:1.25rem;color:#65717b;font-size:0.68rem">
+      <span>© 2026 Monvela Digital. Todos os direitos reservados.</span>
+      <span>Presença local. Alcance digital.</span>
+    </div>
+  </footer>
+
+  <!-- ===== BOTÃO FLUTUANTE WHATSAPP ===== -->
+  <div style="position:absolute;right:1.25rem;bottom:1.25rem;z-index:45;display:flex;align-items:center;gap:0.65rem;border:1px solid rgba(244,241,234,0.25);border-radius:999px;background:rgba(8,23,34,0.92);box-shadow:0 1rem 3rem rgba(0,0,0,0.32);padding:0.5rem 0.9rem 0.5rem 0.5rem;backdrop-filter:blur(14px)">
+    <span style="display:grid;width:2rem;height:2rem;place-items:center;border-radius:50%;background:var(--orange);color:#160a00;font-weight:800">W</span>
+    <strong style="font-size:0.75rem;font-weight:700">Conversar</strong>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

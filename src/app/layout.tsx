@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
+import { Analytics } from "@vercel/analytics/next";
 import { siteConfig } from "@/content/site";
-import { AnalyticsPlaceholder } from "@/components/analytics-placeholder";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -64,7 +64,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="pt-BR" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body>
         {children}
-        <AnalyticsPlaceholder />
+        <Analytics />
       </body>
     </html>
   );
