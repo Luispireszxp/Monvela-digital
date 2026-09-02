@@ -7,6 +7,7 @@ import { DigitalContext } from "@/components/digital-context";
 import { FAQ } from "@/components/faq";
 import { FinalCTA } from "@/components/final-cta";
 import { Hero } from "@/components/hero";
+import { InternetMountain } from "@/components/internet-mountain";
 import { Partners } from "@/components/partners";
 import { Problem } from "@/components/problem";
 import { Process } from "@/components/process";
@@ -23,6 +24,7 @@ export default function Home() {
       <Problem />
       <CustomerJourney />
       <DigitalContext />
+      <InternetMountain />
       <Solution />
       <Cycle />
       <ConceptProjects />

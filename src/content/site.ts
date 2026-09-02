@@ -75,6 +75,12 @@ export interface SiteConfig {
     readonly sourceLabel: string;
     readonly sourceUrl: string;
   };
+  readonly internetMountain: {
+    readonly eyebrow: string;
+    readonly title: string;
+    /** Descrição da cena para leitores de tela e prefers-reduced-motion. */
+    readonly a11y: string;
+  };
   readonly solution: {
     readonly eyebrow: string;
     readonly title: string;
@@ -204,6 +210,12 @@ export const siteConfig = {
       "A Monvela conecta seu negócio aos canais onde seus clientes pesquisam, descobrem e conversam.",
     sourceLabel: "Fonte: StatCounter Global Stats — agosto de 2026.",
     sourceUrl: "https://gs.statcounter.com/search-engine-market-share/all/brazil",
+  },
+  internetMountain: {
+    eyebrow: "Presença digital",
+    title: "Ganhar presença na internet é uma escalada. A Monvela sobe com você.",
+    a11y:
+      "O mascote da Monvela escala a montanha da internet, finca uma bandeira branca no topo e, atrapalhado, capota encosta abaixo — terminando sentado ao lado da montanha. A bandeira permanece no alto: a presença digital ficou de pé.",
   },
   solution: {
     eyebrow: "O ecossistema Monvela",
