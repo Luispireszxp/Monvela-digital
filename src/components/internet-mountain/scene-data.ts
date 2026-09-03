@@ -218,19 +218,40 @@ function samplePlace(p: number): { x: number; y: number; s: number; r: number } 
   if (p >= last.p) return { x: last.x, y: last.y, s: last.s, r: last.r };
   let a = first;
   let b = KEYS[1];
+  let index = 0;
   for (let i = 0; i < KEYS.length - 1; i++) {
     if (p >= KEYS[i].p && p <= KEYS[i + 1].p) {
       a = KEYS[i];
       b = KEYS[i + 1];
+      index = i;
       break;
     }
   }
   const lt = (p - a.p) / (b.p - a.p);
-  const e = smoother(lt);
+
+  // Hermite cúbica: atravessa os keyframes com velocidade contínua. A versão
+  // anterior aplicava easing em cada trecho e fazia o mascote frear em todos
+  // os pontos, deixando a subida com aspecto de stop-motion.
+  const before = KEYS[Math.max(0, index - 1)];
+  const after = KEYS[Math.min(KEYS.length - 1, index + 2)];
+  const hermite = (av: number, bv: number, prev: number, next: number) => {
+    const dt = b.p - a.p;
+    const ma = ((bv - prev) / Math.max(0.0001, b.p - before.p)) * dt;
+    const mb = ((next - av) / Math.max(0.0001, after.p - a.p)) * dt;
+    const t2 = lt * lt;
+    const t3 = t2 * lt;
+    return (
+      (2 * t3 - 3 * t2 + 1) * av +
+      (t3 - 2 * t2 + lt) * ma +
+      (-2 * t3 + 3 * t2) * bv +
+      (t3 - t2) * mb
+    );
+  };
+
   return {
-    x: lerp(a.x, b.x, e),
-    y: lerp(a.y, b.y, e),
-    s: lerp(a.s, b.s, e),
+    x: hermite(a.x, b.x, before.x, after.x),
+    y: hermite(a.y, b.y, before.y, after.y),
+    s: hermite(a.s, b.s, before.s, after.s),
     r: lerp(a.r, b.r, lt), // rotação: linear, o movimento já é monotônico
   };
 }
@@ -362,6 +383,7 @@ export type Frame = {
   word: { opacity: number; blur: number; ty: number };
   climb: number;
   flag: { pole: number; furl: number; windOpacity: number };
+  clouds: readonly { x: number; y: number; rot: number }[];
   trailVis: number;
   dust: { scale: number; opacity: number };
   descent: number;
@@ -384,6 +406,28 @@ export function computeFrame(
   const pl = samplePlace(p);
   const pose = samplePose(p);
 
+  // Passada contínua durante a escalada. O balanço cruza os keyframes de pose,
+  // alternando os lados como numa escalada real e desaparece suavemente perto
+  // do cume para não interferir com a ação de fincar a bandeira.
+  const climbIn = smooth(win(p, 0.12, 0.2));
+  const climbOut = 1 - smooth(win(p, 0.555, 0.635));
+  const climbMotion = climbIn * climbOut;
+  if (climbMotion > 0) {
+    const phase = win(p, 0.13, 0.62) * Math.PI * 8.5;
+    const step = Math.sin(phase);
+    const settle = Math.sin(phase * 2);
+    pose[0] += settle * 2.8 * climbMotion;
+    pose[1] -= step * 2.2 * climbMotion;
+    pose[2] += step * 18 * climbMotion;
+    pose[3] += step * 23 * climbMotion;
+    pose[4] -= step * 18 * climbMotion;
+    pose[5] -= step * 23 * climbMotion;
+    pose[6] -= step * 17 * climbMotion;
+    pose[7] -= step * 24 * climbMotion;
+    pose[8] += step * 17 * climbMotion;
+    pose[9] += step * 24 * climbMotion;
+  }
+
   // Capotamento: membros soltos (o giro é da figura inteira, na raiz).
   if (p > 0.758 && p < 0.918) {
     const ph = pl.r * DEG * 0.9;
@@ -399,11 +443,25 @@ export function computeFrame(
 
   const geo = fk(pose);
 
-  // Arcos da queda: um pequeno salto por volta, some ao chegar na base.
+  // Arcos balísticos entre os contatos com a encosta. Cada quique perde altura,
+  // dando peso à descida em vez de manter a figura colada à montanha.
   let y = pl.y;
-  if (p > 0.758 && p < 0.912) {
-    const localT = win(p, 0.758, 0.912);
-    y -= Math.abs(Math.sin(pl.r * DEG)) * 10 * (1 - localT * 0.4);
+  const bounces = [
+    [0.758, 0.8, 34],
+    [0.8, 0.84, 27],
+    [0.84, 0.878, 20],
+    [0.878, 0.912, 13],
+    [0.912, 0.932, 6],
+  ] as const;
+  for (const [start, end, height] of bounces) {
+    if (p >= start && p <= end) {
+      y -= Math.sin(win(p, start, end) * Math.PI) * height;
+      break;
+    }
+  }
+
+  if (climbMotion > 0) {
+    y -= Math.abs(Math.sin(win(p, 0.13, 0.62) * Math.PI * 8.5)) * 2.6 * climbMotion;
   }
 
   const fadeT = reduced ? 0 : smooth(win(p, 0.9, 1));
@@ -434,6 +492,13 @@ export function computeFrame(
       furl: reduced ? 1 : furlEase(win(p, 0.662, 0.715)),
       windOpacity: reduced ? 0 : win(p, 0.66, 0.686) * (1 - win(p, 0.77, 0.82)) * 0.5,
     },
+    // Camadas com massas aparentes diferentes: a nuvem distante deriva menos;
+    // a mais próxima percorre mais espaço e inclina levemente com o vento.
+    clouds: [
+      { x: -42 + p * 92, y: Math.sin(p * Math.PI * 2.2) * 5, rot: -1 + p * 2 },
+      { x: 28 - p * 138, y: Math.sin(p * Math.PI * 2.8 + 1.4) * 8, rot: 1.5 - p * 3 },
+      { x: -18 + p * 176, y: Math.sin(p * Math.PI * 3.2 + 2.1) * 10, rot: -2 + p * 4 },
+    ],
     trailVis: reduced ? 0 : win(p, 0.76, 0.79) * (1 - win(p, 0.9, 0.94)),
     dust: (() => {
       const d = reduced ? 0 : win(p, 0.922, 0.935) * (1 - win(p, 0.945, 0.99));

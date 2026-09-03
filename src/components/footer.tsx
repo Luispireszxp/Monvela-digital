@@ -37,7 +37,15 @@ export function Footer() {
 
         <div className="footer-contact">
           {hasWhatsapp ? (
-            <WhatsAppLink source="footer">WhatsApp</WhatsAppLink>
+            <>
+              <a href={company.phoneUrl}>Telefone: {company.whatsappDisplay}</a>
+              <WhatsAppLink
+                source="footer"
+                ariaLabel={`Conversar com a Monvela pelo WhatsApp no número ${company.whatsappDisplay}`}
+              >
+                WhatsApp: {company.whatsappDisplay}
+              </WhatsAppLink>
+            </>
           ) : null}
           {hasEmail ? (
             <a href={`mailto:${company.contactEmail}`}>{company.contactEmail}</a>

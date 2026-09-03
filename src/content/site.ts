@@ -38,9 +38,11 @@ export interface SiteConfig {
   readonly siteUrl: string;
   readonly contactEmail: string;
   readonly whatsappNumber: string;
+  readonly whatsappDisplay: string;
   readonly hasWhatsapp: boolean;
   readonly whatsappMessage: string;
   readonly whatsappUrl: string;
+  readonly phoneUrl: string;
   readonly navigation: readonly NavItem[];
   readonly hero: {
     readonly titleStart: string;
@@ -152,9 +154,11 @@ export const siteConfig = {
   siteUrl: company.siteUrl,
   contactEmail: company.contactEmail,
   whatsappNumber: company.whatsappNumber,
+  whatsappDisplay: company.whatsappDisplay,
   hasWhatsapp: company.hasWhatsapp,
   whatsappMessage: company.whatsappMessage,
   whatsappUrl: company.whatsappUrl,
+  phoneUrl: company.phoneUrl,
   navigation: [
     { label: "Soluções", href: "/#solucoes" },
     { label: "Projetos", href: "/#projetos" },
@@ -215,7 +219,7 @@ export const siteConfig = {
     eyebrow: "Presença digital",
     title: "Ganhar presença na internet é uma escalada. A Monvela sobe com você.",
     a11y:
-      "O mascote da Monvela escala a montanha da internet, finca uma bandeira branca no topo e, atrapalhado, capota encosta abaixo — terminando sentado ao lado da montanha. A bandeira permanece no alto: a presença digital ficou de pé.",
+      "Entre nuvens, o mascote da Monvela escala a montanha da internet, finca no topo uma bandeira branca com a inscrição Sua Empresa e, atrapalhado, capota encosta abaixo — terminando sentado ao lado da montanha. A bandeira permanece no alto: a presença digital ficou de pé.",
   },
   solution: {
     eyebrow: "O ecossistema Monvela",

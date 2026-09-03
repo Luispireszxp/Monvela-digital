@@ -30,6 +30,9 @@ export function SummitFlag() {
         <g className="im-flag-cloth">
           <g className="im-flag-wave">
             <path d="M602 52 C 648 42 700 60 744 50 C 742 70 742 82 744 102 C 700 92 648 110 602 99 Z" />
+            <text x={672} y={78} textAnchor="middle">
+              SUA EMPRESA
+            </text>
           </g>
         </g>
       </g>

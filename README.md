@@ -33,7 +33,7 @@ Copy-Item .env.example .env.local
 ```
 
 ```env
-NEXT_PUBLIC_WHATSAPP_NUMBER=5585999999999
+NEXT_PUBLIC_WHATSAPP_NUMBER=5511994369111
 NEXT_PUBLIC_CONTACT_EMAIL=contato@seudominio.com.br
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 NEXT_PUBLIC_SUPABASE_URL=https://seu-projeto.supabase.co
@@ -83,9 +83,9 @@ O visual principal provisório está em `public/images/hero-concept.png`. Substi
 
 ## WhatsApp
 
-A mensagem inicial está centralizada em `src/content/site.ts`. O número deve ser alterado apenas em `NEXT_PUBLIC_WHATSAPP_NUMBER`; não o repita nos componentes.
+A mensagem inicial está centralizada em `src/content/site.ts`. O número oficial tem fallback em `src/lib/env.ts` e pode ser substituído por `NEXT_PUBLIC_WHATSAPP_NUMBER`; não o repita nos componentes.
 
-Sem número configurado, os links abrem o WhatsApp com a mensagem preparada, mas sem destinatário definido. Antes da publicação, configure o número oficial e teste no celular e no computador.
+O número oficial configurado é `+55 (11) 99436-9111`. Os links abrem a conversa com a mensagem inicial preparada.
 
 ## Métricas futuras
 
@@ -93,7 +93,7 @@ O ponto reservado para Google Analytics e Meta Pixel está em `src/components/an
 
 ## Próximos passos recomendados
 
-1. Adicionar número oficial do WhatsApp, e-mail e URL final.
+1. Adicionar o e-mail e a URL final.
 2. Substituir a logo, o favicon e a imagem conceitual pelos materiais oficiais.
 3. Revisar os textos com os dados definitivos da Monvela.
 4. Testar os links e a política de privacidade com os dados reais.

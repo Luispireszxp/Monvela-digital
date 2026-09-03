@@ -25,6 +25,11 @@ function buildWhatsappUrl(): string {
     : `https://wa.me/?text=${text}`;
 }
 
+function formatBrazilianPhone(number: string): string {
+  const match = number.match(/^55(\d{2})(\d{5})(\d{4})$/);
+  return match ? `+55 (${match[1]}) ${match[2]}-${match[3]}` : number;
+}
+
 export type Partner = {
   /** Nome do parceiro — usado também no texto alternativo do logo. */
   readonly name: string;
@@ -54,9 +59,11 @@ export const company = {
   siteUrl: env.siteUrl,
 
   whatsappNumber: env.whatsappNumber,
+  whatsappDisplay: formatBrazilianPhone(env.whatsappNumber),
   hasWhatsapp: env.hasWhatsapp,
   whatsappMessage: WHATSAPP_MESSAGE,
   whatsappUrl: buildWhatsappUrl(),
+  phoneUrl: env.hasWhatsapp ? `tel:+${env.whatsappNumber}` : "",
 
   contactEmail: env.contactEmail,
   hasEmail: env.hasEmail,

@@ -10,9 +10,11 @@
  */
 
 const FALLBACK_SITE_URL = "http://localhost:3000";
+const OFFICIAL_WHATSAPP_NUMBER = "5511994369111";
 
 const rawSiteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
-const rawWhatsapp = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.trim();
+const rawWhatsapp =
+  process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.trim() || OFFICIAL_WHATSAPP_NUMBER;
 const rawEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL?.trim();
 const rawFacebook = process.env.NEXT_PUBLIC_FACEBOOK_URL?.trim();
 const rawInstagram = process.env.NEXT_PUBLIC_INSTAGRAM_URL?.trim();

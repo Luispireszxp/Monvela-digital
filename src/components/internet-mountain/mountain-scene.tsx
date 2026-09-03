@@ -35,7 +35,7 @@ export function MountainScene({ a11y }: { a11y: string }) {
     if (!stage) return;
 
     const qs = <T extends Element>(sel: string) => stage.querySelector<T>(sel);
-    const word = qs<HTMLElement>(".im-word");
+    const word = qs<SVGTextElement>(".im-word");
     const svg = qs<SVGSVGElement>(".im-svg");
     const mountainGroup = qs<SVGGElement>(".im-mountain");
     const contours = Array.from(stage.querySelectorAll<SVGPathElement>(".im-contour"));
@@ -43,6 +43,7 @@ export function MountainScene({ a11y }: { a11y: string }) {
     const pole = qs<SVGRectElement>(".im-pole");
     const cloth = qs<SVGGElement>(".im-flag-cloth");
     const wind = qs<SVGGElement>(".im-wind");
+    const clouds = Array.from(stage.querySelectorAll<SVGGElement>(".im-cloud"));
     const mascotRoot = qs<SVGGElement>(".im-mascot");
     const mLine = (n: string) => qs<SVGLineElement>(`[data-im="${n}"]`);
     const torso = mLine("torso");
@@ -91,7 +92,7 @@ export function MountainScene({ a11y }: { a11y: string }) {
       if (word) {
         word.style.opacity = f.word.opacity.toFixed(3);
         word.style.filter = f.word.blur > 0.05 ? `blur(${f.word.blur.toFixed(2)}px)` : "none";
-        word.style.transform = `translate(-50%, calc(-50% + ${f.word.ty.toFixed(1)}px))`;
+        word.setAttribute("transform", `translate(0 ${f.word.ty.toFixed(1)})`);
       }
       if (climbPath) climbPath.style.opacity = f.climb.toFixed(3);
 
@@ -101,6 +102,14 @@ export function MountainScene({ a11y }: { a11y: string }) {
       }
       if (cloth) cloth.style.transform = `scaleX(${f.flag.furl.toFixed(3)})`;
       if (wind) wind.style.opacity = f.flag.windOpacity.toFixed(3);
+      for (let i = 0; i < clouds.length; i++) {
+        const cloud = f.clouds[i];
+        if (!cloud) continue;
+        clouds[i].setAttribute(
+          "transform",
+          `translate(${cloud.x.toFixed(2)} ${cloud.y.toFixed(2)}) rotate(${cloud.rot.toFixed(2)})`,
+        );
+      }
 
       const m = f.mascot;
       if (mascotRoot) {
@@ -225,10 +234,6 @@ export function MountainScene({ a11y }: { a11y: string }) {
   return (
     <div className="im-track" ref={trackRef}>
       <div className="im-stage">
-        <p className="im-word" aria-hidden="true">
-          INTERNET
-        </p>
-
         <svg
           className="im-svg"
           viewBox="0 0 1440 788"
@@ -236,6 +241,33 @@ export function MountainScene({ a11y }: { a11y: string }) {
           role="img"
           aria-label={a11y}
         >
+          <defs>
+            <clipPath id="im-mountain-clip">
+              <path d="M82 752 L568 174 L636 174 L1164 752 Z" />
+            </clipPath>
+          </defs>
+
+          <g className="im-cloud im-cloud-back" aria-hidden="true">
+            <path d="M176 224 C176 201 194 184 218 186 C229 157 270 151 290 176 C315 169 340 187 340 214 C340 219 339 224 337 229 L184 229 C179 229 176 227 176 224 Z" />
+          </g>
+          <g className="im-cloud im-cloud-mid" aria-hidden="true">
+            <path d="M1050 284 C1050 262 1068 246 1090 247 C1103 216 1146 214 1163 244 C1191 236 1218 256 1218 284 L1216 293 L1056 293 C1052 291 1050 288 1050 284 Z" />
+          </g>
+          <g className="im-cloud im-cloud-front" aria-hidden="true">
+            <path d="M816 132 C816 114 830 101 848 101 C858 78 890 76 903 99 C924 94 945 109 945 130 L943 138 L821 138 C818 137 816 135 816 132 Z" />
+          </g>
+
+          <text
+            className="im-word"
+            x={622}
+            y={548}
+            textAnchor="middle"
+            clipPath="url(#im-mountain-clip)"
+            aria-hidden="true"
+          >
+            INTERNET
+          </text>
+
           <TopographicMountain />
 
           <path
