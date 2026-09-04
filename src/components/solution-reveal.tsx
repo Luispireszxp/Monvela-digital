@@ -3,8 +3,8 @@
 import { useEffect, useRef, type ReactNode } from "react";
 
 /**
- * Abertura do "Ecossistema Monvela": o texto sobe e a ilustração aparece com
- * fade, uma única vez, quando a seção entra na tela (mesmo padrão de
+ * Abertura do "Ecossistema Monvela": o texto sobe e o papel de parede da
+ * cidade aparece com fade, uma única vez, ao entrar na tela (mesmo padrão de
  * `journey-reveal.tsx` / `problem-story/problem-reveal.tsx`). Depois disso,
  * um paralaxe bem sutil desloca a ilustração conforme rola — só liga com
  * `prefers-reduced-motion: no-preference`, e o listener de scroll só existe
@@ -21,7 +21,7 @@ export function SolutionReveal({ children }: { children: ReactNode }) {
     if (!root) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const media = root.querySelector<HTMLElement>(".sol-opening-media");
+    const media = root.querySelector<HTMLElement>(".sol-wallpaper");
     let queued = false;
     let scrollAttached = false;
 

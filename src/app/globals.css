@@ -563,23 +563,34 @@ img { max-width: 100%; }
 .dc-percentage.dc-percentage-pop,
 .dc-reveal[data-animate="on"] .dc-percentage.dc-percentage-pop { opacity: 1; animation: dc-pop 700ms cubic-bezier(0.34, 1.56, 0.64, 1) 1; }
 
-/* Ecossistema Monvela — abertura vira um hero interno com a ilustração dos
-   mascotes atrás do texto. Base = tudo já visível (SSR/sem-JS/reduced-motion);
-   entrada + paralaxe só existem dentro de `prefers-reduced-motion: no-preference`. */
-.sol-opening { position: relative; display: flex; align-items: center; overflow: hidden; min-height: clamp(24rem, 44vw, 36rem); margin-bottom: clamp(3rem, 6vw, 5.5rem); border-radius: var(--radius); }
-.sol-opening-media { position: absolute; inset: 0; }
-.sol-opening-img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; user-select: none; }
-.sol-opening-scrim { position: absolute; inset: 0; background: linear-gradient(90deg, var(--ivory) 0%, var(--ivory) 34%, rgba(244, 241, 234, 0.75) 48%, rgba(244, 241, 234, 0.28) 64%, rgba(244, 241, 234, 0) 80%); }
-.sol-opening-copy { position: relative; z-index: 1; max-width: 34rem; padding: clamp(2rem, 5vw, 3.5rem); }
-.sol-opening-copy .section-heading { margin-bottom: 0; }
+/* Ecossistema Monvela — a ilustração da cidade é PAPEL DE PAREDE da abertura:
+   fica atrás da mensagem, sangrando de ponta a ponta da seção, e se dissolve
+   no marfim antes da lista de serviços. Base = tudo já visível (SSR/sem-JS/
+   reduced-motion); entrada + paralaxe só dentro de `no-preference`. */
+.solution { position: relative; overflow: hidden; padding-top: 0; }
+
+.sol-intro-wrap { position: relative; }
+.sol-wallpaper { position: absolute; inset: 0; }
+.sol-wallpaper-img { --sol-img-opacity: 0.92; display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; opacity: var(--sol-img-opacity); user-select: none; }
+/* véu: suaviza a cidade inteira, reforça o lado do texto e dissolve o topo e a
+   base no marfim — sem caixa branca, sem vidro, sem sombra */
+.sol-wallpaper-veil {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, var(--ivory) 0%, rgba(244, 241, 234, 0) 16%, rgba(244, 241, 234, 0) 58%, rgba(244, 241, 234, 0.88) 86%, var(--ivory) 100%),
+    linear-gradient(90deg, rgba(244, 241, 234, 0.88) 0%, rgba(244, 241, 234, 0.7) 26%, rgba(244, 241, 234, 0.32) 50%, rgba(244, 241, 234, 0.16) 74%, rgba(244, 241, 234, 0.16) 100%);
+}
+.sol-intro { position: relative; z-index: 1; display: flex; align-items: center; min-height: clamp(30rem, 50vw, 42rem); padding-block: clamp(5.5rem, 10vw, 9.5rem) clamp(3rem, 6vw, 5rem); }
+.sol-intro .section-heading { max-width: 34rem; margin-bottom: 0; }
 
 @media (prefers-reduced-motion: no-preference) {
-  .sol-opening-media { transform: translateY(var(--sol-parallax, 0px)); will-change: transform; }
+  .sol-wallpaper { transform: translateY(var(--sol-parallax, 0px)); will-change: transform; }
 
-  .sol-reveal .sol-opening-copy { opacity: 0; transform: translateY(1.5rem); }
-  .sol-reveal .sol-opening-img { opacity: 0; }
-  .sol-reveal[data-sol-animate="on"] .sol-opening-copy { animation: sol-copy-in 800ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both; }
-  .sol-reveal[data-sol-animate="on"] .sol-opening-img { animation: sol-img-in 900ms ease-out both; }
+  .sol-reveal .sol-intro { opacity: 0; transform: translateY(1.5rem); }
+  .sol-reveal .sol-wallpaper-img { opacity: 0; }
+  .sol-reveal[data-sol-animate="on"] .sol-intro { animation: sol-copy-in 800ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both; }
+  .sol-reveal[data-sol-animate="on"] .sol-wallpaper-img { animation: sol-img-in 900ms ease-out both; }
 }
 @keyframes sol-copy-in {
   from { opacity: 0; transform: translateY(1.5rem); }
@@ -587,7 +598,7 @@ img { max-width: 100%; }
 }
 @keyframes sol-img-in {
   from { opacity: 0; }
-  to { opacity: 1; }
+  to { opacity: var(--sol-img-opacity, 1); }
 }
 
 /* Solução — pilares */
@@ -864,13 +875,15 @@ img { max-width: 100%; }
 
   .editorial-grid, .split-section, .about-grid { grid-template-columns: 1fr; }
   .split-section .section-heading { position: static; }
-  /* imagem sai de trás do texto e volta ao fluxo normal: texto primeiro,
-     ilustração inteira (sem cortar) logo abaixo */
-  .sol-opening { flex-direction: column; align-items: stretch; min-height: 0; border-radius: 0; }
-  .sol-opening-media { position: static; order: 2; }
-  .sol-opening-img { width: 100%; height: auto; }
-  .sol-opening-scrim { display: none; }
-  .sol-opening-copy { order: 1; max-width: none; padding: 0 0 1.75rem; }
+  /* a cidade sai de trás do texto e volta ao fluxo normal: texto primeiro,
+     ilustração inteira (sem cortar ninguém) logo abaixo, serviços por último */
+  .solution { padding-top: clamp(5.5rem, 10vw, 9.5rem); }
+  .sol-intro-wrap { display: flex; flex-direction: column; }
+  .sol-wallpaper { position: static; order: 2; }
+  .sol-wallpaper-img { --sol-img-opacity: 1; width: 100%; height: auto; }
+  .sol-wallpaper-veil { display: none; }
+  .sol-intro { order: 1; min-height: 0; padding-block: 0 1.75rem; }
+  .sol-intro .section-heading { max-width: none; }
   .consequences { grid-template-columns: 1fr; }
   .concept-grid { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
