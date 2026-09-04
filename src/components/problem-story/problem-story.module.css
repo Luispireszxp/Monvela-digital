@@ -1,0 +1,953 @@
+.section {
+  position: relative;
+  overflow: clip;
+  background: #f6f1e8;
+  color: #101a24;
+}
+
+.motionRoot {
+  position: relative;
+}
+
+.opening {
+  display: grid;
+  grid-template-columns: minmax(21rem, 0.95fr) minmax(27rem, 1.05fr);
+  align-items: center;
+  gap: clamp(2rem, 4vw, 4.5rem);
+  min-height: clamp(42rem, 68vw, 48rem);
+  padding-block: clamp(6rem, 9vw, 8rem) clamp(7rem, 10vw, 9rem);
+}
+
+.openingCopy {
+  position: relative;
+  z-index: 2;
+}
+
+.eyebrow {
+  color: #c55200;
+}
+
+.title {
+  max-width: 14ch;
+  margin: 0;
+  font-size: clamp(3rem, 4.9vw, 5rem);
+  font-weight: 570;
+  line-height: 0.98;
+  letter-spacing: -0.058em;
+  text-wrap: balance;
+}
+
+.intro {
+  max-width: 37rem;
+  margin: 2rem 0 0;
+  color: #46515b;
+  font-size: clamp(1rem, 1.3vw, 1.12rem);
+  line-height: 1.75;
+}
+
+.openingVisual {
+  position: relative;
+  align-self: end;
+  width: min(100%, 49rem);
+  margin-left: auto;
+}
+
+.openingVisual::before {
+  position: absolute;
+  z-index: -1;
+  inset: 20% 2% 2%;
+  border: 1px solid rgba(23, 37, 50, 0.08);
+  border-radius: 50%;
+  content: "";
+}
+
+.story {
+  position: relative;
+  z-index: 2;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chapter {
+  position: relative;
+  margin-top: -3rem;
+  scroll-margin-top: 5rem;
+  border-radius: 50% 50% 0 0 / 3rem 3rem 0 0;
+  background: #f9f5ed;
+}
+
+.chapter:nth-child(2) {
+  background: #eee8dd;
+}
+
+.chapter:nth-child(3) {
+  background: #f7f2e9;
+}
+
+.chapterInner {
+  display: grid;
+  grid-template-columns: minmax(21rem, 0.92fr) minmax(27rem, 1.08fr);
+  align-items: center;
+  gap: clamp(3rem, 5vw, 5.5rem);
+  min-height: clamp(34rem, 46vw, 40rem);
+  padding-block: clamp(6.25rem, 8vw, 8rem);
+}
+
+.chapterCopy {
+  display: grid;
+  grid-template-columns: 2.4rem minmax(0, 1fr);
+  gap: clamp(1.1rem, 2vw, 1.8rem);
+  align-items: stretch;
+}
+
+.chapterCopy h3 {
+  max-width: 15ch;
+  margin: 0;
+  font-size: clamp(2.35rem, 3.9vw, 3.95rem);
+  font-weight: 570;
+  line-height: 1;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
+}
+
+.chapterCopy p:last-child {
+  max-width: 31rem;
+  margin: 1.5rem 0 0;
+  color: #525d66;
+  font-size: clamp(1rem, 1.3vw, 1.12rem);
+  line-height: 1.7;
+}
+
+.progress {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 2.4rem;
+  min-height: 14rem;
+}
+
+.progress::before {
+  position: absolute;
+  top: 2.6rem;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background: linear-gradient(#e66500 0 68%, rgba(230, 101, 0, 0) 100%);
+  content: "";
+}
+
+.progress > span {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border: 1px solid rgba(230, 101, 0, 0.45);
+  border-radius: 50%;
+  background: #f9f5ed;
+  color: #d95d00;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.62rem;
+}
+
+.chapter:nth-child(2) .progress > span {
+  background: #eee8dd;
+}
+
+.chapter:nth-child(3) .progress > span {
+  background: #f7f2e9;
+}
+
+.chapterReverse .chapterCopy {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.chapterReverse .chapterVisual {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.chapterVisual {
+  position: relative;
+  width: min(100%, 48rem);
+}
+
+.chapter:nth-child(2) .chapterVisual {
+  width: min(108%, 52rem);
+  margin-left: 0;
+}
+
+.illustration {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.illustration path,
+.illustration circle,
+.illustration ellipse {
+  vector-effect: non-scaling-stroke;
+}
+
+.storeGlyph {
+  fill: rgba(255, 255, 255, 0.16);
+  stroke: #273441;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.missedStore {
+  fill: rgba(255, 255, 255, 0.04);
+  stroke: #939ba2;
+  stroke-dasharray: 5 6;
+}
+
+.cityHorizon {
+  fill: none;
+  stroke: rgba(39, 52, 65, 0.2);
+  stroke-width: 1;
+}
+
+.cityGround {
+  fill: none;
+  stroke: #273441;
+  stroke-width: 2;
+}
+
+.spotlightBeam {
+  fill: rgba(255, 122, 0, 0.075);
+  stroke: none;
+}
+
+.mapPin {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+}
+
+.mapPin path {
+  fill: #f26b00;
+  stroke: none;
+}
+
+.mapPin circle {
+  fill: #f9f5ed;
+  stroke: none;
+}
+
+.spotlightMascot,
+.mascot {
+  fill: #f26b00;
+  stroke: #f26b00;
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.spotlightMascot circle,
+.mascot circle {
+  fill: #f26b00;
+  stroke: none;
+}
+
+.spotlightMascot path,
+.mascot path {
+  fill: none;
+}
+
+/* Peça carregada pelo mascote (ex.: a prancha da ponte). */
+.mascotLoad {
+  fill: #f26b00;
+  stroke: #d85f00;
+  stroke-width: 2 !important;
+}
+
+/* Dois quadros de passada: A = passo aberto, B = pose parada.
+   Sem animação (sem JS / movimento reduzido) mostra só a pose parada. */
+.walkLimbA {
+  opacity: 0;
+}
+
+.walkLimbB {
+  opacity: 1;
+}
+
+/* Hooks de posição/animação por cena — precisam existir para o CSS Module
+   resolver `styles.xMascot`. */
+.radarMascot,
+.bridgeMascot,
+.funnelMascot,
+.radarMascotSignal {
+  will-change: transform;
+}
+
+.radarMascotSignal {
+  fill: none;
+  stroke: #f26b00;
+  stroke-linecap: round;
+}
+
+.spotlightDevice {
+  stroke-width: 4 !important;
+}
+
+.signalStroke {
+  stroke-width: 4 !important;
+}
+
+.radarRing {
+  fill: none;
+  stroke: #34414e;
+  stroke-width: 1.6;
+}
+
+.radarSweepPivot {
+  /* O vértice do feixe (0,0 local) é o centro do radar. Com fill-box, esse
+     ponto cai na quina esquerda-inferior da bounding box do wedge. */
+  transform-box: fill-box;
+  transform-origin: 0 100%;
+  rotate: 305deg;
+}
+
+.radarSweep {
+  fill: rgba(255, 122, 0, 0.11);
+  stroke: none;
+}
+
+.radarSweepEdge {
+  fill: none;
+  stroke: #263644;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.radarCenter {
+  fill: #263644;
+  stroke: none;
+}
+
+.radarTargets circle {
+  fill: #f26b00;
+  stroke: none;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.radarTargets .storeGlyph {
+  fill: none;
+}
+
+.radarMissed > circle {
+  fill: rgba(255, 255, 255, 0.35);
+  stroke: #7d8992;
+  stroke-width: 1.7;
+  stroke-dasharray: 7 7;
+}
+
+.island {
+  fill: #1d2b38;
+  stroke: #253543;
+  stroke-width: 2;
+}
+
+.bridgeLeft,
+.bridgeRight,
+.bridgeDeck,
+.people {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+}
+
+.bridgeDeck path {
+  fill: #344250;
+  stroke: #25323e;
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+/* Vão onde falta a prancha. A cor acompanha o fundo do capítulo 2
+   (.chapter:nth-child(2)) para ler como um buraco no tabuleiro. */
+.bridgeGap {
+  fill: #eee8dd;
+  stroke: #cabfac;
+  stroke-width: 1.5;
+  stroke-dasharray: 3 5;
+}
+
+.bridgeDeck .bridgePiece {
+  fill: #f26b00;
+  stroke: #d85f00;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.people {
+  fill: #f26b00;
+  stroke: #f26b00;
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.people circle {
+  fill: #f26b00;
+  stroke: none;
+}
+
+.people path {
+  fill: none;
+}
+
+.bridgeSymbols {
+  fill: none;
+  stroke: #f5eee3;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.funnel {
+  fill: none;
+  stroke: #2d3a47;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.funnelTangle {
+  stroke: #9aa4ad;
+  stroke-width: 2 !important;
+}
+
+.mainOpportunityPath,
+.competitorPath {
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 6 9;
+}
+
+.mainOpportunityPath {
+  stroke: #f26b00;
+}
+
+.competitorPath {
+  stroke: #8e979e;
+}
+
+.opportunityDot {
+  fill: #f26b00;
+  stroke: none;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* Suas oportunidades recuperadas = laranja cheio; perdidas p/ concorrentes =
+   cinza mais claro e um pouco menores. No tamanho pequeno os dois eram laranja
+   e viravam um borrão. */
+.mainDot {
+  opacity: 1;
+}
+
+.competitorDot {
+  fill: #b3bbc2;
+  opacity: 0.9;
+}
+
+.redirectLine {
+  fill: none;
+  stroke: #f26b00;
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.transition {
+  position: relative;
+  z-index: 3;
+  scroll-margin-top: 5rem;
+  min-height: clamp(9rem, 12vw, 11.5rem);
+  margin-top: -2px;
+  overflow: hidden;
+  background: #030a12;
+}
+
+.transitionCurve {
+  position: absolute;
+  top: -1px;
+  left: -10%;
+  width: 120%;
+  height: clamp(4rem, 7vw, 6.5rem);
+  border-radius: 0 0 50% 50% / 0 0 100% 100%;
+  background: #f7f2e9;
+}
+
+/* saída da faixa: a seção Solução (clara) vem logo abaixo — sem esta curva a
+   faixa escura teria topo arredondado e base reta (lado torto). */
+.transitionOutCurve {
+  position: absolute;
+  bottom: -1px;
+  left: -10%;
+  width: 120%;
+  height: clamp(2.75rem, 4.5vw, 4rem);
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  background: #f4f1ea;
+}
+
+.transitionInner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  min-height: clamp(9rem, 12vw, 11.5rem);
+  padding-block: clamp(4.5rem, 7vw, 6rem) clamp(2rem, 3vw, 2.75rem);
+}
+
+.transitionInner p {
+  position: relative;
+  margin: 0;
+  padding-bottom: clamp(2rem, 3.5vw, 3rem);
+  color: #ff9036;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: clamp(0.92rem, 1.6vw, 1.15rem);
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* tique curto para baixo: liga a chamada ao bloco seguinte */
+.transitionInner p::after {
+  position: absolute;
+  bottom: 0;
+  left: 2px;
+  width: 1px;
+  height: clamp(1.4rem, 2.6vw, 2.2rem);
+  background: linear-gradient(#ff9036, rgba(255, 144, 54, 0));
+  content: "";
+}
+
+.fallingDots {
+  position: absolute;
+  z-index: 1;
+  top: clamp(2.8rem, 6vw, 5rem);
+  right: clamp(2rem, 13vw, 13rem);
+  width: clamp(7rem, 15vw, 13rem);
+  height: 100%;
+}
+
+.fallingDots i {
+  position: absolute;
+  top: 0;
+  left: var(--dot-left);
+  width: var(--dot-size);
+  height: var(--dot-size);
+  border-radius: 50%;
+  background: #f26b00;
+  opacity: 0.82;
+}
+
+.fallingDots i:nth-child(1) { --dot-left: 10%; --dot-size: 0.42rem; }
+.fallingDots i:nth-child(2) { --dot-left: 32%; --dot-size: 0.58rem; top: 1.5rem; }
+.fallingDots i:nth-child(3) { --dot-left: 55%; --dot-size: 0.34rem; top: 0.7rem; }
+.fallingDots i:nth-child(4) { --dot-left: 72%; --dot-size: 0.48rem; top: 2.2rem; }
+.fallingDots i:nth-child(5) { --dot-left: 88%; --dot-size: 0.3rem; top: 1.1rem; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .motionRoot[data-motion="ready"] [data-problem-step]:not([data-active="true"]) .openingCopy,
+  .motionRoot[data-motion="ready"] [data-problem-step]:not([data-active="true"]) .openingVisual,
+  .motionRoot[data-motion="ready"] [data-problem-step]:not([data-active="true"]) .chapterCopy,
+  .motionRoot[data-motion="ready"] [data-problem-step]:not([data-active="true"]) .chapterVisual,
+  .motionRoot[data-motion="ready"] [data-problem-step]:not([data-active="true"]) .transitionInner {
+    opacity: 0;
+    transform: translateY(2rem);
+  }
+
+  .motionRoot[data-motion="ready"] [data-problem-step][data-active="true"] .openingCopy,
+  .motionRoot[data-motion="ready"] [data-problem-step][data-active="true"] .chapterCopy,
+  .motionRoot[data-motion="ready"] [data-problem-step][data-active="true"] .transitionInner {
+    animation: problem-copy-in 780ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .motionRoot[data-motion="ready"] [data-problem-step][data-active="true"] .openingVisual,
+  .motionRoot[data-motion="ready"] [data-problem-step][data-active="true"] .chapterVisual {
+    animation: problem-visual-in 920ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both;
+  }
+
+  [data-active="true"] .spotlightBeam {
+    animation: spotlight-open 1.05s ease-out 260ms both;
+    transform-box: fill-box;
+    transform-origin: center bottom;
+  }
+
+  [data-active="true"] .mapPin {
+    animation: pin-pop 620ms cubic-bezier(0.34, 1.56, 0.64, 1)
+      calc(520ms + var(--problem-delay)) both;
+  }
+
+  [data-active="true"] .missedStore {
+    animation: missed-breathe 3.8s ease-in-out 1.4s infinite;
+  }
+
+  [data-active="true"] .radarRing {
+    stroke-dasharray: 1450;
+    animation: ring-draw 900ms ease-out calc(140ms + var(--ring-delay)) both;
+  }
+
+  [data-active="true"] .radarSweepPivot {
+    animation: radar-scan 1.15s cubic-bezier(0.33, 1, 0.68, 1) 300ms both,
+      radar-drift 20s linear 1.45s infinite;
+  }
+
+  [data-active="true"] .radarTargets circle {
+    animation: target-pop 560ms cubic-bezier(0.34, 1.56, 0.64, 1) 980ms both;
+  }
+
+  [data-active="true"] .radarTargets circle:nth-child(2) { animation-delay: 1.08s; }
+  [data-active="true"] .radarTargets circle:nth-child(3) { animation-delay: 1.18s; }
+  [data-active="true"] .radarTargets circle:nth-child(4) { animation-delay: 1.28s; }
+  [data-active="true"] .radarTargets circle:nth-child(5) { animation-delay: 1.38s; }
+  [data-active="true"] .signalStroke { animation: signal-pulse 900ms ease-out 420ms both; }
+
+  [data-active="true"] .bridgeLeft {
+    animation: bridge-left-in 820ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both;
+  }
+
+  [data-active="true"] .bridgeRight {
+    animation: bridge-right-in 820ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both;
+  }
+
+  [data-active="true"] .bridgeSegment {
+    animation: bridge-segment-in 620ms cubic-bezier(0.22, 1, 0.36, 1)
+      calc(480ms + var(--segment) * 120ms) both;
+    transform-box: fill-box;
+    transform-origin: center bottom;
+  }
+
+  /* Mascotes que caminham: entrada deslizando + ciclo de passada de 2 quadros
+     (perna A / perna B) sincronizado com um leve sobe-desce do corpo. Terminam
+     na pose parada (quadro B). */
+  [data-active="true"] .radarMascot {
+    animation: mascot-stroll 2.2s cubic-bezier(0.37, 0, 0.45, 1) 200ms both;
+  }
+
+  [data-active="true"] .bridgeMascot {
+    animation: mascot-cross 2.6s cubic-bezier(0.37, 0, 0.45, 1) 520ms both;
+  }
+
+  [data-active="true"] .radarMascot .walkLimbA,
+  [data-active="true"] .bridgeMascot .walkLimbA {
+    animation: walk-a 0.44s linear 200ms 5 both;
+  }
+
+  [data-active="true"] .radarMascot .walkLimbB,
+  [data-active="true"] .bridgeMascot .walkLimbB {
+    animation: walk-b 0.44s linear 200ms 5 both;
+  }
+
+  [data-active="true"] .radarMascot .mascotBob,
+  [data-active="true"] .bridgeMascot .mascotBob {
+    animation: mascot-bob 0.44s ease-in-out 200ms 5 both;
+  }
+
+  [data-active="true"] .bridgeMascot .walkLimbA,
+  [data-active="true"] .bridgeMascot .walkLimbB,
+  [data-active="true"] .bridgeMascot .mascotBob {
+    animation-delay: 520ms;
+    animation-iteration-count: 6;
+  }
+
+  /* O mascote entrega a prancha: a peça carregada some enquanto a peça do
+     tabuleiro encaixa no vão. */
+  [data-active="true"] .bridgeMascot .mascotLoad {
+    animation: load-handoff 360ms ease-in 2.55s both;
+  }
+
+  [data-active="true"] .bridgePiece {
+    animation: bridge-piece-in 720ms cubic-bezier(0.22, 1, 0.36, 1) 2.6s both;
+  }
+
+  [data-active="true"] .people {
+    animation: people-react 650ms cubic-bezier(0.34, 1.56, 0.64, 1) 1.72s both;
+  }
+
+  [data-active="true"] .opportunityDot {
+    animation: opportunity-fall 1.05s cubic-bezier(0.22, 1, 0.36, 1)
+      calc(280ms + var(--dot-delay)) both;
+  }
+
+  [data-active="true"] .redirectLine {
+    stroke-dasharray: 300;
+    animation: redirect-draw 1s ease-out 820ms both;
+  }
+
+  [data-active="true"] .fallingDots i {
+    animation: transition-dot 5.8s ease-in-out both;
+  }
+
+  [data-active="true"] .fallingDots i:nth-child(2) { animation-delay: 140ms; }
+  [data-active="true"] .fallingDots i:nth-child(3) { animation-delay: 280ms; }
+  [data-active="true"] .fallingDots i:nth-child(4) { animation-delay: 420ms; }
+  [data-active="true"] .fallingDots i:nth-child(5) { animation-delay: 560ms; }
+}
+
+@keyframes problem-copy-in {
+  from { opacity: 0; transform: translateY(2rem); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes problem-visual-in {
+  from { opacity: 0; transform: translateY(2.8rem) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes spotlight-open {
+  from { opacity: 0; scale: 0.2 0; }
+  to { opacity: 1; scale: 1; }
+}
+
+@keyframes pin-pop {
+  from { opacity: 0; scale: 0.3; translate: 0 1rem; }
+  to { opacity: 1; scale: 1; translate: 0; }
+}
+
+@keyframes missed-breathe {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.78; }
+}
+
+@keyframes ring-draw {
+  from { opacity: 0; stroke-dashoffset: 1450; }
+  to { opacity: 1; stroke-dashoffset: 0; }
+}
+
+@keyframes radar-scan {
+  from { rotate: -55deg; opacity: 0; }
+  to { rotate: 305deg; opacity: 1; }
+}
+
+@keyframes radar-drift {
+  from { rotate: 305deg; }
+  to { rotate: 665deg; }
+}
+
+@keyframes target-pop {
+  from { opacity: 0; scale: 0.2; }
+  to { opacity: 1; scale: 1; }
+}
+
+@keyframes signal-pulse {
+  from { opacity: 0; stroke-dasharray: 1 80; }
+  to { opacity: 1; stroke-dasharray: 80 1; }
+}
+
+@keyframes bridge-left-in {
+  from { opacity: 0; translate: -3.5rem 1rem; }
+  to { opacity: 1; translate: 0; }
+}
+
+@keyframes bridge-right-in {
+  from { opacity: 0; translate: 3.5rem 1rem; }
+  to { opacity: 1; translate: 0; }
+}
+
+@keyframes bridge-segment-in {
+  from { opacity: 0; scale: 0.65; translate: 0 -1.5rem; }
+  to { opacity: 1; scale: 1; translate: 0; }
+}
+
+@keyframes mascot-stroll {
+  from { opacity: 0; translate: -46px 0; }
+  20% { opacity: 1; }
+  to { opacity: 1; translate: 0 0; }
+}
+
+@keyframes mascot-cross {
+  from { opacity: 0; translate: -118px 0; }
+  15% { opacity: 1; }
+  to { opacity: 1; translate: 0 0; }
+}
+
+/* Troca de quadro de passada: metade do ciclo cada perna. */
+@keyframes walk-a {
+  0%, 49.9% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+@keyframes walk-b {
+  0%, 49.9% { opacity: 0; }
+  50%, 100% { opacity: 1; }
+}
+
+@keyframes mascot-bob {
+  0%, 50%, 100% { translate: 0 0; }
+  25%, 75% { translate: 0 -3px; }
+}
+
+@keyframes bridge-piece-in {
+  from { opacity: 0; translate: 0 -5rem; rotate: -8deg; }
+  to { opacity: 1; translate: 0; rotate: 0deg; }
+}
+
+@keyframes load-handoff {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes people-react {
+  0% { translate: 0; scale: 1; }
+  45% { translate: 0 -1rem; scale: 1.04; }
+  100% { translate: 0; scale: 1; }
+}
+
+@keyframes opportunity-fall {
+  from { opacity: 0; translate: var(--dot-x) var(--dot-y); scale: 0.55; }
+  35% { opacity: 1; }
+  to { opacity: 1; translate: 0; scale: 1; }
+}
+
+@keyframes redirect-draw {
+  from { opacity: 0; stroke-dashoffset: 300; }
+  to { opacity: 1; stroke-dashoffset: 0; }
+}
+
+@keyframes transition-dot {
+  0% { opacity: 0; translate: 0 -1rem; }
+  18% { opacity: 0.85; }
+  70% { opacity: 0.4; }
+  100% { opacity: 0; translate: 0 12rem; }
+}
+
+@media (max-width: 1024px) {
+  .opening {
+    grid-template-columns: minmax(18rem, 0.92fr) minmax(22rem, 1.08fr);
+  }
+
+  .chapterInner {
+    grid-template-columns: minmax(18rem, 0.92fr) minmax(23rem, 1.08fr);
+    gap: 3rem;
+  }
+}
+
+@media (max-width: 800px) {
+  .opening {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    min-height: 0;
+    padding: 5.5rem 1.375rem 7.5rem;
+  }
+
+  .title {
+    max-width: 14ch;
+    font-size: clamp(2.65rem, 10vw, 4.8rem);
+  }
+
+  .openingVisual {
+    width: calc(100% + 1.25rem);
+    margin: 0 -0.625rem -2rem;
+  }
+
+  .chapter {
+    margin-top: -2.5rem;
+    border-radius: 50% 50% 0 0 / 2.5rem 2.5rem 0 0;
+  }
+
+  .chapterInner {
+    grid-template-columns: 1fr;
+    gap: 2.25rem;
+    min-height: 0;
+    padding: 5.5rem 1.375rem 6.25rem;
+  }
+
+  .chapterCopy,
+  .chapterReverse .chapterCopy {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .chapterVisual,
+  .chapterReverse .chapterVisual {
+    grid-column: 1;
+    grid-row: 2;
+    width: 100%;
+    margin-inline: auto;
+  }
+
+  .chapter:nth-child(2) .chapterVisual {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .chapterCopy h3 {
+    max-width: 15ch;
+    font-size: clamp(2.15rem, 8.5vw, 3.3rem);
+  }
+
+  .progress {
+    min-height: 8rem;
+  }
+
+  .transitionInner {
+    padding-inline: 1.375rem;
+  }
+
+  .fallingDots {
+    right: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .opening {
+    padding-block: 5rem 6.75rem;
+  }
+
+  .title {
+    font-size: clamp(2.45rem, 10.2vw, 3.1rem);
+  }
+
+  .intro {
+    margin-top: 1.5rem;
+    font-size: 0.98rem;
+    line-height: 1.68;
+  }
+
+  .chapterInner {
+    padding-block: 5rem 5.75rem;
+  }
+
+  .chapterCopy {
+    grid-template-columns: 1.8rem minmax(0, 1fr);
+    gap: 0.85rem;
+  }
+
+  .progress {
+    width: 1.8rem;
+  }
+
+  .progress > span {
+    width: 1.65rem;
+    height: 1.65rem;
+    font-size: 0.54rem;
+  }
+
+  .progress::before {
+    top: 2.2rem;
+  }
+
+  .chapterCopy h3 {
+    font-size: clamp(2rem, 9.6vw, 2.8rem);
+  }
+
+  .chapterCopy p:last-child {
+    margin-top: 1.1rem;
+    font-size: 0.96rem;
+  }
+
+  .chapterVisual {
+    width: calc(100% + 1rem);
+    margin-inline: -0.5rem;
+  }
+
+  .transitionInner {
+    padding-right: 5rem;
+  }
+}

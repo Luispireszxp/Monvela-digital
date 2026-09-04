@@ -302,7 +302,7 @@ export const siteConfig = {
       segment: "Restaurante",
       description:
         "Cardápio, ambiente e reservas reunidos em uma página que dá vontade de visitar.",
-      coverImage: "",
+      coverImage: "/images/concepts/mesa-e-brasa.webp",
       desktopPreview: "",
       mobilePreview: "",
     },
@@ -311,7 +311,7 @@ export const siteConfig = {
       segment: "Hotel e pousada",
       description:
         "Acomodações, estrutura e localização apresentadas com calma e confiança.",
-      coverImage: "",
+      coverImage: "/images/concepts/pousada-vista-clara.webp",
       desktopPreview: "",
       mobilePreview: "",
     },
@@ -320,7 +320,7 @@ export const siteConfig = {
       segment: "Oficina e comércio local",
       description:
         "Serviços, horários e contato rápido para orçamento, sem rodeios.",
-      coverImage: "",
+      coverImage: "/images/concepts/oficina-norte.webp",
       desktopPreview: "",
       mobilePreview: "",
     },
