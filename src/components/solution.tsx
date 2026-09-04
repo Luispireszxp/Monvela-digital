@@ -25,15 +25,26 @@ export async function Solution() {
       <SolutionReveal>
         <div className="sol-intro-wrap">
           <div className="sol-wallpaper" aria-hidden="true">
-            <Image
-              className="sol-wallpaper-img"
-              src="/images/ecossistema-monvela-bg.webp"
-              alt=""
-              aria-hidden="true"
-              width={1672}
-              height={941}
-              sizes="100vw"
-            />
+            {/* direção de arte: no celular a cena vira retrato (as mesmas
+                cenas empilhadas), no desktop segue a versão em paisagem. O
+                <source media> garante que só UMA das duas é baixada. */}
+            <picture className="sol-wallpaper-pic">
+              <source
+                media="(max-width: 900px)"
+                srcSet="/images/ecossistema-monvela-bg-retrato.webp"
+                width={864}
+                height={1316}
+              />
+              <Image
+                className="sol-wallpaper-img"
+                src="/images/ecossistema-monvela-bg.webp"
+                alt=""
+                aria-hidden="true"
+                width={1672}
+                height={941}
+                sizes="100vw"
+              />
+            </picture>
             <span className="sol-wallpaper-veil" />
           </div>
           <div className="shell sol-intro">

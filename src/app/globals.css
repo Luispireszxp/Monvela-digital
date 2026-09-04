@@ -571,6 +571,7 @@ img { max-width: 100%; }
 
 .sol-intro-wrap { position: relative; }
 .sol-wallpaper { position: absolute; inset: 0; }
+.sol-wallpaper-pic { display: block; width: 100%; height: 100%; }
 .sol-wallpaper-img { --sol-img-opacity: 0.92; display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; opacity: var(--sol-img-opacity); user-select: none; }
 /* véu: suaviza a cidade inteira, reforça o lado do texto e dissolve o topo e a
    base no marfim — sem caixa branca, sem vidro, sem sombra */
@@ -1168,6 +1169,7 @@ img { max-width: 100%; }
   .solution { padding-top: clamp(5.5rem, 10vw, 9.5rem); }
   .sol-intro-wrap { display: flex; flex-direction: column; }
   .sol-wallpaper { position: static; order: 2; }
+  .sol-wallpaper-pic { height: auto; }
   .sol-wallpaper-img { --sol-img-opacity: 1; width: 100%; height: auto; }
   .sol-wallpaper-veil { display: none; }
   .sol-intro { order: 1; min-height: 0; padding-block: 0 1.75rem; }
