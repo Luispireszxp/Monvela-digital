@@ -122,11 +122,13 @@ img { max-width: 100%; }
 
 @keyframes hero-store-in {
   0% { opacity: 0; transform: translateY(28px); }
+  6% { transform: translateY(-3px); }
   9%, 86% { opacity: 1; transform: translateY(0); }
   96%, 100% { opacity: 0; transform: translateY(12px); }
 }
 @keyframes hero-device-in {
   0%, 5% { opacity: 0; transform: translateY(22px); }
+  14% { transform: translateY(-2px); }
   18%, 86% { opacity: 1; transform: translateY(0); }
   96%, 100% { opacity: 0; transform: translateY(10px); }
 }
@@ -341,8 +343,14 @@ img { max-width: 100%; }
 .cj-slide-search { transform: translateX(-100%); }
 .cj-slide-site { transform: translateX(0); }
 .cj-slide-chat { transform: translateX(100%); }
-/* Reduced-motion: a história vira texto visível abaixo do aparelho. */
-.cj-reveal[data-journey="static"] .cj-sr-only { position: static; width: auto; height: auto; margin: 1.25rem 0 0; clip-path: none; white-space: normal; color: var(--muted-dark); font-size: 0.85rem; line-height: 1.6; text-align: center; }
+/* Reduced-motion: sem encenação. O aparelho mostra o site aberto (estado-base)
+   e a história vira texto CENTRADO ABAIXO dele — sem balão/cursor/dissolve soltos
+   e sem o `.cj-stage` (flex-row) empurrando o texto para o lado do aparelho. */
+.cj-reveal[data-journey="static"] .cj-stage { flex-direction: column; align-items: center; }
+.cj-reveal[data-journey="static"] .cj-bubble,
+.cj-reveal[data-journey="static"] .cj-cursor,
+.cj-reveal[data-journey="static"] .cj-dissolve { display: none; }
+.cj-reveal[data-journey="static"] .cj-sr-only { position: static; width: auto; max-width: 44ch; height: auto; margin: 1.5rem auto 0; clip-path: none; white-space: normal; color: var(--muted-dark); font-size: 0.85rem; line-height: 1.6; text-align: center; }
 
 @media (prefers-reduced-motion: no-preference) {
   /* --- ponto de partida (só quando o JS está no comando) --- */
@@ -384,8 +392,8 @@ img { max-width: 100%; }
   /* cena 2 — comparação */
   .cj-reveal[data-journey="on"] .cj-results { animation: cj-browse 2.4s ease-in-out 5.4s both; }
   .cj-reveal[data-journey="on"] .cj-result-chosen { border-color: transparent; box-shadow: none; animation: cj-choose 0.7s ease-out 6.4s forwards; }
-  .cj-reveal[data-journey="on"] .cj-cursor { animation: cj-tap-card 1.1s ease-in-out 7.1s both, cj-tap-wa 1.4s ease-in-out 12.2s forwards; }
-  .cj-reveal[data-journey="on"] .cj-cursor-ring { animation: cj-press 0.35s ease 7.8s 1, cj-press 0.35s ease 13.1s 1; }
+  .cj-reveal[data-journey="on"] .cj-cursor { animation: cj-tap-card 1.1s cubic-bezier(0.5, 0, 0.2, 1) 7.1s both, cj-tap-wa 1.4s cubic-bezier(0.5, 0, 0.2, 1) 12.2s forwards; }
+  .cj-reveal[data-journey="on"] .cj-cursor-ring { animation: cj-press 0.42s cubic-bezier(0.34, 1.56, 0.64, 1) 7.8s 1, cj-press 0.42s cubic-bezier(0.34, 1.56, 0.64, 1) 13.1s 1; }
 
   /* cena 3 — o site entra */
   .cj-reveal[data-journey="on"] .cj-slide-search { animation: cj-slide-out 0.85s cubic-bezier(0.65, 0, 0.35, 1) 8s both; }
@@ -399,7 +407,7 @@ img { max-width: 100%; }
   .cj-reveal[data-journey="on"] .cj-chat-ticks { animation: cj-fade 0.4s ease 15.4s both; }
 
   /* fecho e dissolução */
-  .cj-reveal[data-journey="on"] .cj-closing { animation: cj-rise 0.9s ease-out 16.5s both; }
+  .cj-reveal[data-journey="on"] .cj-closing { animation: cj-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) 16.5s both; }
   .cj-reveal[data-journey="on"] .cj-dissolve { animation: cj-soften 1.6s ease-in 17.2s forwards; }
   .cj-reveal[data-journey="on"] .cj-phone-frame { animation: cj-settle 1.6s ease-in-out 17.2s forwards; }
 }
@@ -420,9 +428,10 @@ img { max-width: 100%; }
 @keyframes cj-bounce { 0%, 100% { transform: none; opacity: 0.4; } 50% { transform: translateY(-4px); opacity: 1; } }
 @keyframes cj-browse { 0%, 12% { transform: none; } 46%, 62% { transform: translateY(-26px); } 100% { transform: none; } }
 @keyframes cj-choose { to { border-color: var(--orange); box-shadow: 0 0 0 1px rgba(255, 122, 0, 0.35), 0 0 1.4rem rgba(255, 122, 0, 0.18); } }
-@keyframes cj-tap-card { 0% { opacity: 0; top: 62%; left: 62%; } 30%, 100% { opacity: 1; top: 34%; left: 62%; } }
+/* o cursor desliza chegando um tico menor, passa de leve do ponto e assenta */
+@keyframes cj-tap-card { 0% { opacity: 0; top: 62%; left: 62%; scale: 0.8; } 20% { opacity: 1; } 30% { top: 34%; left: 62%; scale: 1.08; } 40%, 100% { opacity: 1; top: 34%; left: 62%; scale: 1; } }
 @keyframes cj-tap-wa { 0% { opacity: 1; top: 34%; left: 62%; } 55%, 92% { opacity: 1; top: 90%; left: 50%; } 100% { opacity: 0; top: 90%; left: 50%; } }
-@keyframes cj-press { 50% { scale: 0.68; } }
+@keyframes cj-press { 0% { scale: 1; } 18% { scale: 1.12; } 52% { scale: 0.62; } 100% { scale: 1; } }
 @keyframes cj-slide-in { from { transform: translateX(100%); } to { transform: translateX(0); } }
 @keyframes cj-slide-out { from { transform: translateX(0); } to { transform: translateX(-100%); } }
 @keyframes cj-glow { 50% { box-shadow: 0 0 1.6rem rgba(18, 140, 75, 0.75); } }
@@ -512,9 +521,10 @@ img { max-width: 100%; }
   .dc-reveal[data-animate="off"] .dc-link,
   .dc-reveal[data-animate="off"] .dc-descent { stroke-dashoffset: 100; }
 
-  .dc-reveal[data-animate="on"] .dc-eyebrow { animation: dc-up 0.7s ease-out both; }
-  .dc-reveal[data-animate="on"] .dc-title { animation: dc-up 0.8s ease-out 0.12s both; }
-  .dc-reveal[data-animate="on"] .dc-chart { animation: dc-chart-in 0.9s ease-out 0.28s both; }
+  /* entradas com deslocamento assentam com peso (não em cor/opacidade só) */
+  .dc-reveal[data-animate="on"] .dc-eyebrow { animation: dc-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .dc-reveal[data-animate="on"] .dc-title { animation: dc-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both; }
+  .dc-reveal[data-animate="on"] .dc-chart { animation: dc-chart-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.28s both; }
   .dc-reveal[data-animate="on"] .dc-ring-group { animation: dc-ring-turn 1.7s cubic-bezier(0.33, 1, 0.68, 1) 0.45s both; }
   .dc-reveal[data-animate="on"] .dc-ring-others { animation: dc-draw-others 0.32s linear 0.45s both; }
   .dc-reveal[data-animate="on"] .dc-ring-google { animation: dc-draw-google 1.25s cubic-bezier(0.33, 1, 0.68, 1) 0.77s both; }
@@ -522,16 +532,16 @@ img { max-width: 100%; }
   .dc-reveal[data-animate="on"] .dc-arrow { animation: dc-fade 0.4s ease-out calc(3.3s + var(--dc-arrow-order) * 0.35s) both; }
   .dc-reveal[data-animate="on"] .dc-arrow-line { animation: dc-draw-arrow 0.7s ease-out calc(3.3s + var(--dc-arrow-order) * 0.35s) both; }
   .dc-reveal[data-animate="on"] .dc-google-mark { animation: dc-pop-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 3.85s both; }
-  .dc-reveal[data-animate="on"] .dc-legend-google { animation: dc-up 0.6s ease-out 3.95s both; }
-  .dc-reveal[data-animate="on"] .dc-legend-others { animation: dc-up 0.6s ease-out 4.25s both; }
-  .dc-reveal[data-animate="on"] .dc-journey-title { animation: dc-up 0.7s ease-out 4.55s both; }
+  .dc-reveal[data-animate="on"] .dc-legend-google { animation: dc-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) 3.95s both; }
+  .dc-reveal[data-animate="on"] .dc-legend-others { animation: dc-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) 4.25s both; }
+  .dc-reveal[data-animate="on"] .dc-journey-title { animation: dc-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) 4.55s both; }
   .dc-reveal[data-animate="on"] .dc-node { animation: dc-pop-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) calc(4.8s + var(--dc-node-order) * 0.18s) both; }
   .dc-reveal[data-animate="on"] .dc-link { animation: dc-draw 0.6s ease-out calc(5.6s + var(--dc-link-order) * 0.22s) both; }
   .dc-reveal[data-animate="on"] .dc-stage { animation: dc-fade 0.6s ease-out 6.3s both; }
   .dc-reveal[data-animate="on"] .dc-descent { animation: dc-draw 0.9s ease-out calc(6.5s + var(--dc-descent-order) * 0.12s) both; }
   .dc-reveal[data-animate="on"] .dc-store { animation: dc-store-in 0.8s cubic-bezier(0.33, 1, 0.68, 1) 7.1s both; }
   .dc-reveal[data-animate="on"] .dc-store-lights circle { animation: dc-light 0.7s ease-out 7.7s both; }
-  .dc-reveal[data-animate="on"] .dc-closing { animation: dc-up 0.7s ease-out 8s both; }
+  .dc-reveal[data-animate="on"] .dc-closing { animation: dc-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) 8s both; }
   .dc-reveal[data-animate="on"] .dc-source { animation: dc-fade 0.7s ease-out 8.25s both; }
   /* pulsação discreta, só depois que tudo terminou */
   .dc-reveal[data-animate="on"] .dc-node-ring { animation: dc-node-pulse 4.5s ease-in-out 9s infinite; }
@@ -682,14 +692,14 @@ img { max-width: 100%; }
 .im-head-wrap { max-width: 42ch; }
 .im-heading { margin: 0.15rem 0 0; color: var(--ivory); font-family: var(--font-serif-display), Georgia, "Times New Roman", serif; font-size: clamp(1.85rem, 4vw, 3rem); font-weight: 400; line-height: 1.12; letter-spacing: -0.02em; text-wrap: balance; }
 
-.im-track { position: relative; height: 240svh; }
+.im-track { position: relative; height: 210svh; }
 .im-track::after { position: absolute; inset: auto 0 0; z-index: 3; height: clamp(2rem, 4vw, 3rem); content: ""; background: linear-gradient(180deg, transparent 55%, var(--ivory)); pointer-events: none; }
 /* contain: faz o palco sticky virar bloco-contêiner dos filhos absolutos */
 .im-stage { position: sticky; top: 0; height: 100svh; min-height: 26rem; overflow: hidden; contain: layout paint; }
 
 .im-svg { position: absolute; left: 0; top: var(--header-height); width: 100%; height: calc(100% - var(--header-height)); z-index: 2; display: block; overflow: visible; }
 
-.im-word { fill: rgba(150, 164, 178, 0.09); stroke: rgba(160, 173, 186, 0.24); stroke-width: 1.35; paint-order: stroke fill; font-family: var(--font-geist), Arial, sans-serif; font-size: 98px; font-weight: 800; letter-spacing: 0.11em; user-select: none; pointer-events: none; }
+.im-word { fill: rgba(152, 166, 180, 0.12); stroke: rgba(170, 183, 196, 0.32); stroke-width: 1.4; paint-order: stroke fill; font-family: var(--font-geist), Arial, sans-serif; font-size: 90px; font-weight: 800; letter-spacing: 0.11em; user-select: none; pointer-events: none; }
 
 .im-cloud { fill: rgba(244, 241, 234, 0.075); stroke: rgba(190, 199, 208, 0.2); stroke-width: 1.25; vector-effect: non-scaling-stroke; transform-origin: center; }
 .im-cloud-back { opacity: 0.45; }
@@ -706,8 +716,10 @@ img { max-width: 100%; }
   72% { transform: translateY(2px) scale(0.992, 1.012); }
 }
 
+.im-silhouette { fill: rgba(92, 110, 130, 0.1); stroke: rgba(116, 134, 154, 0.45); stroke-width: 1.35; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
 .im-contour { fill: none; stroke: #5a6c7f; stroke-width: 1.15; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
-.im-climb-path { fill: none; stroke: #ff8a34; stroke-width: 2; stroke-linecap: round; stroke-dasharray: 2 11; vector-effect: non-scaling-stroke; }
+/* rastro discreto que se desenha ATRÁS do mascote conforme ele sobe */
+.im-climb-path { fill: none; stroke: #ff8a34; stroke-width: 2.4; stroke-linecap: round; opacity: 0.32; vector-effect: non-scaling-stroke; }
 
 .im-mascot line { stroke: var(--orange); stroke-linecap: round; stroke-linejoin: round; }
 .im-mascot .im-torso { stroke-width: 5.6; }
@@ -729,9 +741,6 @@ img { max-width: 100%; }
 }
 
 .im-wind line { stroke: rgba(244, 241, 234, 0.5); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 30 26; }
-.im-trail circle { fill: var(--orange); }
-.im-dust circle { fill: rgba(190, 199, 208, 0.5); }
-.im-descent { stroke: var(--orange); stroke-width: 3; stroke-linecap: round; }
 
 .im-sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
@@ -739,8 +748,10 @@ img { max-width: 100%; }
 .internet-mountain[data-reduced="true"] .im-track { height: auto; }
 .internet-mountain[data-reduced="true"] .im-track::after { display: none; }
 .internet-mountain[data-reduced="true"] .im-stage { position: static; height: auto; min-height: 0; padding-block: clamp(3rem, 8vw, 6rem); }
-.internet-mountain[data-reduced="true"] .im-svg { max-height: 68svh; }
-.internet-mountain[data-reduced="true"] .im-sr { position: static; width: auto; height: auto; margin: 1.75rem auto 0; clip-path: none; white-space: normal; max-width: 44ch; color: var(--muted-dark); font-size: 0.9rem; line-height: 1.6; text-align: center; }
+/* sem sticky, a cena passa a ocupar o fluxo e o texto vem LOGO ABAIXO dela
+   (antes o <svg> ficava absoluto e o parágrafo caía por cima) */
+.internet-mountain[data-reduced="true"] .im-svg { position: static; width: min(100%, 620px); height: auto; margin-inline: auto; }
+.internet-mountain[data-reduced="true"] .im-sr { position: static; width: auto; height: auto; margin: 1.5rem auto 0; clip-path: none; white-space: normal; max-width: 44ch; color: var(--muted-dark); font-size: 0.9rem; line-height: 1.6; text-align: center; }
 
 /* Responsivo */
 @media (max-width: 1024px) {
@@ -785,7 +796,11 @@ img { max-width: 100%; }
      as linhas topográficas e afina o contorno da palavra */
   .internet-mountain { padding-block: clamp(3rem, 10vw, 5rem) 0; }
   .im-stage { min-height: 20rem; }
+  /* nessa faixa a "câmera" segue o mascote (viewBox estreito ~440u): recorta
+     limpo e a palavra precisa ser bem menor em unidades de usuário */
+  .im-svg { overflow: hidden; }
   /* menos linhas topográficas: metade delas */
   .im-contour:nth-of-type(even) { display: none; }
-  .im-word { font-size: 86px; letter-spacing: 0.07em; stroke-width: 1.1; }
+  .im-word { font-size: 44px; letter-spacing: 0.05em; stroke-width: 1; }
+  .internet-mountain[data-reduced="true"] .im-svg { overflow: visible; }
 }

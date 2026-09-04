@@ -22,10 +22,10 @@ export default function Home() {
     <main>
       <Hero />
       <Problem />
+      <Solution />
       <CustomerJourney />
       <DigitalContext />
       <InternetMountain />
-      <Solution />
       <Cycle />
       <ConceptProjects />
       <Partners />

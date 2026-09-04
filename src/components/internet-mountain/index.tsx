@@ -6,9 +6,8 @@ import { MountainScene } from "./mountain-scene";
  * cliente e a solução Monvela.
  *
  * O mascote escala uma montanha de linhas topográficas, finca a bandeira no
- * topo e, atrapalhado, capota encosta abaixo até cair sentado. A bandeira fica.
- * Mistura tecnologia, superação e um humor leve — sem cara, mãos ou pés: a
- * personalidade vem só das poses.
+ * topo e fica de pé ao lado dela, aliviado. Mistura tecnologia e superação —
+ * sem cara, mãos ou pés: a personalidade vem só das poses.
  *
  * O componente-cliente (`MountainScene`) faz o scrub; aqui fica só a casca da
  * seção, o título e a descrição acessível.
