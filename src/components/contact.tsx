@@ -2,7 +2,6 @@
 
 import { useActionState } from "react";
 import { submitLead, type LeadFormState } from "@/app/actions";
-import { company } from "@/config/company";
 import { siteConfig } from "@/content/site";
 import { WhatsAppLink } from "./whatsapp-link";
 
@@ -22,22 +21,15 @@ export function Contact() {
           <WhatsAppLink source="contact" className="text-link contact-whatsapp">
             {content.whatsappLabel} <span aria-hidden="true">↗</span>
           </WhatsAppLink>
-          {siteConfig.hasWhatsapp || company.hasEmail ? (
+          {siteConfig.hasWhatsapp ? (
             <div className="contact-direct" aria-label="Contatos diretos da Monvela">
-              {siteConfig.hasWhatsapp ? (
-                <>
-                  <a href={siteConfig.phoneUrl}>Telefone: {siteConfig.whatsappDisplay}</a>
-                  <WhatsAppLink
-                    source="contact"
-                    ariaLabel={`Conversar com a Monvela pelo WhatsApp no número ${siteConfig.whatsappDisplay}`}
-                  >
-                    WhatsApp: {siteConfig.whatsappDisplay}
-                  </WhatsAppLink>
-                </>
-              ) : null}
-              {company.hasEmail ? (
-                <a href={`mailto:${company.contactEmail}`}>E-mail: {company.contactEmail}</a>
-              ) : null}
+              <a href={siteConfig.phoneUrl}>Telefone: {siteConfig.whatsappDisplay}</a>
+              <WhatsAppLink
+                source="contact"
+                ariaLabel={`Conversar com a Monvela pelo WhatsApp no número ${siteConfig.whatsappDisplay}`}
+              >
+                WhatsApp: {siteConfig.whatsappDisplay}
+              </WhatsAppLink>
             </div>
           ) : null}
         </div>

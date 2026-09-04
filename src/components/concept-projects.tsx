@@ -24,39 +24,33 @@ export function ConceptProjects() {
         />
 
         <div className="concept-grid">
-          {concepts.map((concept) => {
-            // `coverImage` como `string` (não o literal do `as const` no
-            // site.ts) mantém o marcador vivo para concepts futuros sem capa.
-            const coverImage: string = concept.coverImage;
-
-            return (
-              <article className="concept-card" key={concept.name}>
-                <div className="concept-cover">
-                  {coverImage ? (
-                    <Image
-                      src={coverImage}
-                      alt={`Capa do projeto-conceito ${concept.name}`}
-                      fill
-                      sizes="(max-width: 900px) 100vw, 33vw"
-                    />
-                  ) : (
-                    <span className="concept-cover-placeholder" aria-hidden="true">
-                      {concept.segment}
-                    </span>
-                  )}
-                  <p className="concept-badge">Projeto-conceito</p>
-                </div>
-                <div className="concept-body">
-                  <p className="concept-segment">{concept.segment}</p>
-                  <h3>{concept.name}</h3>
-                  <p className="concept-description">{concept.description}</p>
-                  <span className="concept-cta" aria-disabled="true">
-                    {conceptsSection.ctaLabel} <em>· em breve</em>
+          {concepts.map((concept) => (
+            <article className="concept-card" key={concept.name}>
+              <div className="concept-cover">
+                {concept.coverImage ? (
+                  <Image
+                    src={concept.coverImage}
+                    alt={`Capa do projeto-conceito ${concept.name}`}
+                    fill
+                    sizes="(max-width: 900px) 100vw, 33vw"
+                  />
+                ) : (
+                  <span className="concept-cover-placeholder" aria-hidden="true">
+                    {concept.segment}
                   </span>
-                </div>
-              </article>
-            );
-          })}
+                )}
+                <p className="concept-badge">Projeto-conceito</p>
+              </div>
+              <div className="concept-body">
+                <p className="concept-segment">{concept.segment}</p>
+                <h3>{concept.name}</h3>
+                <p className="concept-description">{concept.description}</p>
+                <span className="concept-cta" aria-disabled="true">
+                  {conceptsSection.ctaLabel} <em>· em breve</em>
+                </span>
+              </div>
+            </article>
+          ))}
         </div>
 
         <p className="concept-disclaimer">{conceptsSection.disclaimer}</p>

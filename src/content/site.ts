@@ -219,7 +219,7 @@ export const siteConfig = {
     eyebrow: "Presença digital",
     title: "Ganhar presença na internet é uma escalada. A Monvela sobe com você.",
     a11y:
-      "Entre nuvens, o mascote da Monvela escala a montanha da internet e finca no cume uma bandeira branca com a inscrição Sua Empresa. Já no topo, ergue os braços, respira aliviado e fica de pé ao lado da bandeira, olhando a vista: a presença digital ficou firme.",
+      "Entre nuvens, o mascote da Monvela escala a montanha da internet, finca no topo uma bandeira branca com a inscrição Sua Empresa e, atrapalhado, capota encosta abaixo — terminando sentado ao lado da montanha. A bandeira permanece no alto: a presença digital ficou de pé.",
   },
   solution: {
     eyebrow: "O ecossistema Monvela",
@@ -302,7 +302,7 @@ export const siteConfig = {
       segment: "Restaurante",
       description:
         "Cardápio, ambiente e reservas reunidos em uma página que dá vontade de visitar.",
-      coverImage: "/images/concepts/mesa-e-brasa.webp",
+      coverImage: "",
       desktopPreview: "",
       mobilePreview: "",
     },
@@ -311,7 +311,7 @@ export const siteConfig = {
       segment: "Hotel e pousada",
       description:
         "Acomodações, estrutura e localização apresentadas com calma e confiança.",
-      coverImage: "/images/concepts/pousada-vista-clara.webp",
+      coverImage: "",
       desktopPreview: "",
       mobilePreview: "",
     },
@@ -320,7 +320,7 @@ export const siteConfig = {
       segment: "Oficina e comércio local",
       description:
         "Serviços, horários e contato rápido para orçamento, sem rodeios.",
-      coverImage: "/images/concepts/oficina-norte.webp",
+      coverImage: "",
       desktopPreview: "",
       mobilePreview: "",
     },
