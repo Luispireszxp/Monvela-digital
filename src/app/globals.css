@@ -563,6 +563,33 @@ img { max-width: 100%; }
 .dc-percentage.dc-percentage-pop,
 .dc-reveal[data-animate="on"] .dc-percentage.dc-percentage-pop { opacity: 1; animation: dc-pop 700ms cubic-bezier(0.34, 1.56, 0.64, 1) 1; }
 
+/* Ecossistema Monvela — abertura vira um hero interno com a ilustração dos
+   mascotes atrás do texto. Base = tudo já visível (SSR/sem-JS/reduced-motion);
+   entrada + paralaxe só existem dentro de `prefers-reduced-motion: no-preference`. */
+.sol-opening { position: relative; display: flex; align-items: center; overflow: hidden; min-height: clamp(24rem, 44vw, 36rem); margin-bottom: clamp(3rem, 6vw, 5.5rem); border-radius: var(--radius); }
+.sol-opening-media { position: absolute; inset: 0; }
+.sol-opening-img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; user-select: none; }
+.sol-opening-scrim { position: absolute; inset: 0; background: linear-gradient(90deg, var(--ivory) 0%, var(--ivory) 34%, rgba(244, 241, 234, 0.75) 48%, rgba(244, 241, 234, 0.28) 64%, rgba(244, 241, 234, 0) 80%); }
+.sol-opening-copy { position: relative; z-index: 1; max-width: 34rem; padding: clamp(2rem, 5vw, 3.5rem); }
+.sol-opening-copy .section-heading { margin-bottom: 0; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .sol-opening-media { transform: translateY(var(--sol-parallax, 0px)); will-change: transform; }
+
+  .sol-reveal .sol-opening-copy { opacity: 0; transform: translateY(1.5rem); }
+  .sol-reveal .sol-opening-img { opacity: 0; }
+  .sol-reveal[data-sol-animate="on"] .sol-opening-copy { animation: sol-copy-in 800ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both; }
+  .sol-reveal[data-sol-animate="on"] .sol-opening-img { animation: sol-img-in 900ms ease-out both; }
+}
+@keyframes sol-copy-in {
+  from { opacity: 0; transform: translateY(1.5rem); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes sol-img-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 /* Solução — pilares */
 .split-section { display: grid; grid-template-columns: minmax(17rem, 0.75fr) minmax(0, 1.25fr); gap: clamp(3rem, 9vw, 9rem); align-items: start; }
 .split-section .section-heading { position: sticky; top: calc(var(--header-height) + 2rem); margin: 0; }
@@ -837,6 +864,13 @@ img { max-width: 100%; }
 
   .editorial-grid, .split-section, .about-grid { grid-template-columns: 1fr; }
   .split-section .section-heading { position: static; }
+  /* imagem sai de trás do texto e volta ao fluxo normal: texto primeiro,
+     ilustração inteira (sem cortar) logo abaixo */
+  .sol-opening { flex-direction: column; align-items: stretch; min-height: 0; border-radius: 0; }
+  .sol-opening-media { position: static; order: 2; }
+  .sol-opening-img { width: 100%; height: auto; }
+  .sol-opening-scrim { display: none; }
+  .sol-opening-copy { order: 1; max-width: none; padding: 0 0 1.75rem; }
   .consequences { grid-template-columns: 1fr; }
   .concept-grid { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
