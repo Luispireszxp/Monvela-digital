@@ -178,6 +178,12 @@
   margin-left: 0;
 }
 
+/* comparação de busca (retrato, ~2:3) — sem isso herdaria os 48rem padrão de
+   largura e ficaria com quase 60rem de altura ao lado do texto */
+.chapter:nth-child(3) .chapterVisual {
+  width: min(100%, 24rem);
+}
+
 .illustration {
   display: block;
   width: 100%;

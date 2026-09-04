@@ -1,3 +1,4 @@
+import Image from "next/image";
 import styles from "./problem-story.module.css";
 
 type IllustrationProps = { className?: string };
@@ -214,159 +215,33 @@ export function RadarIllustration({ className }: IllustrationProps) {
   );
 }
 
+/**
+ * Ponte e comparação de busca: imagens estáticas fornecidas pelo dono (fora do
+ * sistema SVG+CSS das outras cenas — sem animação própria, só o fade/scale de
+ * entrada genérico que toda `.chapterVisual` tem ao entrar na tela).
+ */
 export function BridgeIllustration({ className }: IllustrationProps) {
   return (
-    <svg
+    <Image
       className={className}
-      viewBox="0 0 800 460"
-      role="img"
-      aria-labelledby="problem-bridge-title"
-    >
-      <title id="problem-bridge-title">
-        O mascote leva a peça que faltava e completa uma ponte de informações entre um
-        comércio e seus clientes.
-      </title>
-
-      <g className={styles.bridgeLeft} aria-hidden="true">
-        <path className={styles.island} d="M0 300H246l-12 134H0Z" />
-        <StoreGlyph x={68} y={230} scale={1.06} />
-      </g>
-      <g className={styles.bridgeRight} aria-hidden="true">
-        <path className={styles.island} d="M800 300H554l12 134h234Z" />
-        <g className={styles.people} transform="translate(632 230)">
-          <g>
-            <circle cx="0" cy="0" r="9" />
-            <path d="M0 10v34m0-22-18 12m18-12 18 12M0 44l-15 28M0 44l15 28" />
-          </g>
-          <g transform="translate(46 -26)">
-            <circle cx="0" cy="0" r="9" />
-            <path d="M0 10v34m0-22-16-16m16 16 16-16M0 44l-15 28M0 44l15 28" />
-          </g>
-          <g transform="translate(94 4)">
-            <circle cx="0" cy="0" r="9" />
-            <path d="M0 10v34m0-22-18 10m18-10 18-10M0 44l-15 28M0 44l15 28" />
-          </g>
-        </g>
-      </g>
-
-      <g className={styles.bridgeDeck} aria-hidden="true">
-        <path
-          className={styles.bridgeSegment}
-          style={{ "--segment": 0 } as React.CSSProperties}
-          d="M236 300h58l-4 34h-58Z"
-        />
-        <path
-          className={styles.bridgeSegment}
-          style={{ "--segment": 1 } as React.CSSProperties}
-          d="M298 300h58l-3 34h-58Z"
-        />
-        <path className={styles.bridgeGap} d="M360 300h72l-2 34h-72Z" />
-        <path
-          className={styles.bridgeSegment}
-          style={{ "--segment": 3 } as React.CSSProperties}
-          d="M444 300h58l-3 34h-58Z"
-        />
-        <path
-          className={styles.bridgeSegment}
-          style={{ "--segment": 4 } as React.CSSProperties}
-          d="M506 300h58l-4 34h-58Z"
-        />
-        <path className={styles.bridgePiece} d="M360 300h72l-2 34h-72Z" />
-      </g>
-
-      <g className={styles.bridgeSymbols} aria-hidden="true">
-        <path d="M251 314l7 7 12-14" />
-        <path d="M327 309l9 9-9 9-9-9Z" />
-        <path d="M535 309v18m-9-9h18" />
-      </g>
-
-      <Mascot
-        x={334}
-        y={290}
-        scale={0.78}
-        carrying
-        className={styles.bridgeMascot}
-      />
-    </svg>
+      src="/images/problem/ponte.webp"
+      alt="Um mascote carrega a peça que falta para completar uma ponte entre a loja e os clientes que esperam do outro lado."
+      width={1672}
+      height={941}
+      sizes="(max-width: 900px) 100vw, 50vw"
+    />
   );
 }
 
-const opportunityDots = [
-  { cx: 300, cy: 300, dx: 150, dy: -150, delay: 0, main: true },
-  { cx: 262, cy: 338, dx: 112, dy: -112, delay: 150, main: true },
-  { cx: 470, cy: 322, dx: -128, dy: -150, delay: 40 },
-  { cx: 512, cy: 352, dx: -170, dy: -182, delay: 150 },
-  { cx: 548, cy: 388, dx: -206, dy: -218, delay: 260 },
-  { cx: 596, cy: 414, dx: -252, dy: -244, delay: 370 },
-  { cx: 486, cy: 404, dx: -142, dy: -234, delay: 480 },
-];
-
 export function FunnelIllustration({ className }: IllustrationProps) {
   return (
-    <svg
+    <Image
       className={className}
-      viewBox="0 0 760 520"
-      role="img"
-      aria-labelledby="problem-funnel-title"
-    >
-      <title id="problem-funnel-title">
-        Um funil envia a maior parte das oportunidades aos concorrentes enquanto o mascote
-        puxa algumas de volta para o comércio principal.
-      </title>
-
-      <g className={styles.funnel} aria-hidden="true">
-        <ellipse cx="360" cy="86" rx="188" ry="44" />
-        <path d="M172 86c14 74 84 118 132 168v58M548 86c-14 74-84 118-132 168" />
-        <path className={styles.funnelTangle} d="M270 96c120-26 150 40 70 52-64 10-30 58 30 40" />
-      </g>
-
-      <path
-        className={styles.competitorPath}
-        d="M404 320C452 350 520 372 612 420"
-        aria-hidden="true"
-      />
-      <path
-        className={styles.mainOpportunityPath}
-        d="M320 320C280 348 236 356 150 380"
-        aria-hidden="true"
-      />
-
-      {opportunityDots.map((dot) => (
-        <circle
-          key={`${dot.cx}-${dot.cy}`}
-          className={`${styles.opportunityDot} ${dot.main ? styles.mainDot : styles.competitorDot}`}
-          cx={dot.cx}
-          cy={dot.cy}
-          r={dot.main ? 8 : 6}
-          style={
-            {
-              "--dot-x": `${dot.dx}px`,
-              "--dot-y": `${dot.dy}px`,
-              "--dot-delay": `${dot.delay}ms`,
-            } as React.CSSProperties
-          }
-          aria-hidden="true"
-        />
-      ))}
-
-      <StoreGlyph x={92} y={368} scale={1.08} />
-      <StoreGlyph x={560} y={392} scale={0.86} />
-      <StoreGlyph x={664} y={412} scale={0.7} />
-
-      <Mascot
-        x={322}
-        y={402}
-        scale={1.12}
-        lean={-8}
-        className={styles.funnelMascot}
-      />
-      {/* gesto do mascote puxando oportunidades de volta para a loja principal,
-         da mão dele até a entrada da loja, com ponta de seta */}
-      <path
-        className={styles.redirectLine}
-        d="M300 350C252 372 208 374 156 372M156 372l16-8M156 372l16 9"
-        aria-hidden="true"
-      />
-    </svg>
+      src="/images/problem/comparacao-busca.webp"
+      alt="Numa busca, o resultado com site profissional se destaca, com mais avaliações e informações completas; o resultado sem site fica sem link e some da rota de clientes."
+      width={1023}
+      height={1537}
+      sizes="(max-width: 900px) 100vw, 50vw"
+    />
   );
 }
