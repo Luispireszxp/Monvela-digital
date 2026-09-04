@@ -3,11 +3,9 @@
 import { useEffect, useRef } from "react";
 import {
   CLIMB_PATH_D,
+  LANDING,
   REST_FRAME,
-  SILHOUETTE_D,
-  VIEWBOX_FULL,
   computeFrame,
-  computeViewBox,
   type Frame,
   type Seg2,
 } from "./scene-data";
@@ -23,8 +21,8 @@ import { SummitFlag } from "./summit-flag";
  * Sem biblioteca e sem loop ocioso: um listener de `scroll` agenda UM
  * `requestAnimationFrame` por quadro, que escreve atributos direto nos
  * elementos (localizados por classe/`data-im` dentro do efeito), sem re-render
- * do React. Base = estado final (mascote de pé ao lado da bandeira);
- * `prefers-reduced-motion` e sem-JS mostram só esse quadro.
+ * do React. Base = estado final; `prefers-reduced-motion` e sem-JS mostram só
+ * esse quadro.
  */
 export function MountainScene({ a11y }: { a11y: string }) {
   const trackRef = useRef<HTMLDivElement>(null);
@@ -58,11 +56,16 @@ export function MountainScene({ a11y }: { a11y: string }) {
     const legRU = mLine("legRU");
     const legRF = mLine("legRF");
     const head = qs<SVGCircleElement>(".im-head");
+    const trail = qs<SVGGElement>(".im-trail");
+    const trailDots = trail
+      ? (Array.from(trail.children) as SVGCircleElement[])
+      : [];
+    const dust = qs<SVGGElement>(".im-dust");
+    const descent = qs<SVGPathElement>(".im-descent");
 
+    const hist: { x: number; y: number }[] = [];
     const mqReduce = window.matchMedia("(prefers-reduced-motion: reduce)");
-    // Abaixo disto o viewBox largo não cabe em retrato: entra a câmera que segue
-    // o mascote (computeViewBox) e o mascote ganha um empurrão de escala.
-    const mqCompact = window.matchMedia("(max-width: 640px)");
+    const mqCompact = window.matchMedia("(max-width: 720px)");
     let compact = mqCompact.matches;
     let queued = false;
     let lastP = -1;
@@ -91,8 +94,7 @@ export function MountainScene({ a11y }: { a11y: string }) {
         word.style.filter = f.word.blur > 0.05 ? `blur(${f.word.blur.toFixed(2)}px)` : "none";
         word.setAttribute("transform", `translate(0 ${f.word.ty.toFixed(1)})`);
       }
-      // rastro da subida: desenha atrás do mascote conforme ele sobe
-      if (climbPath) climbPath.style.strokeDashoffset = (1 - f.climb).toFixed(3);
+      if (climbPath) climbPath.style.opacity = f.climb.toFixed(3);
 
       if (pole) {
         pole.style.transform = `scaleY(${f.flag.pole.toFixed(3)})`;
@@ -131,6 +133,35 @@ export function MountainScene({ a11y }: { a11y: string }) {
         head.setAttribute("cx", m.head.cx.toFixed(2));
         head.setAttribute("cy", m.head.cy.toFixed(2));
       }
+
+      // Rastro da queda: 3 discos em posições anteriores do mascote (por
+      // distância, não por quadro), baixa opacidade, some rápido.
+      const prev = hist[hist.length - 1];
+      if (!prev || Math.hypot(m.rootX - prev.x, m.rootY - prev.y) > 6) {
+        hist.push({ x: m.rootX, y: m.rootY });
+        if (hist.length > 48) hist.shift();
+      }
+      if (trail) {
+        trail.style.opacity = f.trailVis.toFixed(3);
+        const back = [4, 9, 15];
+        for (let i = 0; i < trailDots.length; i++) {
+          const h = hist[hist.length - 1 - back[i]] ?? { x: m.rootX, y: m.rootY };
+          trailDots[i].setAttribute("cx", h.x.toFixed(1));
+          trailDots[i].setAttribute("cy", h.y.toFixed(1));
+          trailDots[i].setAttribute("opacity", (0.16 - i * 0.045).toFixed(3));
+        }
+      }
+
+      if (dust) {
+        dust.style.opacity = f.dust.opacity.toFixed(3);
+        dust.setAttribute(
+          "transform",
+          `translate(${LANDING.x} ${LANDING.y}) scale(${f.dust.scale.toFixed(
+            3,
+          )}) translate(${-LANDING.x} ${-LANDING.y})`,
+        );
+      }
+      if (descent) descent.style.opacity = f.descent.toFixed(3);
     };
 
     const readProgress = (): number => {
@@ -141,18 +172,12 @@ export function MountainScene({ a11y }: { a11y: string }) {
       return Math.min(1, Math.max(0, -r.top / total));
     };
 
-    const applyViewBox = (p: number) => {
-      svg?.setAttribute("viewBox", computeViewBox(p, compact));
-    };
-
     const render = () => {
       queued = false;
       if (disposed) return;
       const p = readProgress();
       if (Math.abs(p - lastP) > 0.0004) {
         lastP = p;
-        // Em telas estreitas a "câmera" acompanha o mascote quadro a quadro.
-        if (compact) applyViewBox(p);
         applyFrame(p, false);
       }
     };
@@ -163,31 +188,29 @@ export function MountainScene({ a11y }: { a11y: string }) {
       requestAnimationFrame(render);
     };
 
+    const applyViewBox = () => {
+      svg?.setAttribute("viewBox", "0 0 1440 788");
+    };
+
     const setup = () => {
+      applyViewBox();
       lastP = -1;
       if (mqReduce.matches) {
         root?.setAttribute("data-reduced", "true");
-        applyViewBox(1);
         applyFrame(1, true);
         return;
       }
       root?.setAttribute("data-reduced", "false");
-      const p0 = readProgress();
-      applyViewBox(p0);
-      applyFrame(p0, false);
+      applyFrame(readProgress(), false);
       window.addEventListener("scroll", schedule, { passive: true });
     };
 
     const onResize = () => {
       compact = mqCompact.matches;
+      applyViewBox();
       lastP = -1;
-      if (mqReduce.matches) {
-        applyViewBox(1);
-        applyFrame(1, true);
-      } else {
-        applyViewBox(readProgress());
-        schedule();
-      }
+      if (mqReduce.matches) applyFrame(1, true);
+      else schedule();
     };
     const onReduceChange = () => {
       window.removeEventListener("scroll", schedule);
@@ -213,31 +236,31 @@ export function MountainScene({ a11y }: { a11y: string }) {
       <div className="im-stage">
         <svg
           className="im-svg"
-          viewBox={VIEWBOX_FULL}
+          viewBox="0 0 1440 788"
           preserveAspectRatio="xMidYMid meet"
           role="img"
           aria-label={a11y}
         >
           <defs>
             <clipPath id="im-mountain-clip">
-              <path d="M82 782 L572 120 L632 120 L1162 782 Z" />
+              <path d="M82 752 L568 174 L636 174 L1164 752 Z" />
             </clipPath>
           </defs>
 
           <g className="im-cloud im-cloud-back" aria-hidden="true">
-            <path d="M176 200 C176 177 194 160 218 162 C229 133 270 127 290 152 C315 145 340 163 340 190 C340 195 339 200 337 205 L184 205 C179 205 176 203 176 200 Z" />
+            <path d="M176 224 C176 201 194 184 218 186 C229 157 270 151 290 176 C315 169 340 187 340 214 C340 219 339 224 337 229 L184 229 C179 229 176 227 176 224 Z" />
           </g>
           <g className="im-cloud im-cloud-mid" aria-hidden="true">
-            <path d="M1050 248 C1050 226 1068 210 1090 211 C1103 180 1146 178 1163 208 C1191 200 1218 220 1218 248 L1216 257 L1056 257 C1052 255 1050 252 1050 248 Z" />
+            <path d="M1050 284 C1050 262 1068 246 1090 247 C1103 216 1146 214 1163 244 C1191 236 1218 256 1218 284 L1216 293 L1056 293 C1052 291 1050 288 1050 284 Z" />
           </g>
           <g className="im-cloud im-cloud-front" aria-hidden="true">
-            <path d="M816 96 C816 78 830 65 848 65 C858 42 890 40 903 63 C924 58 945 73 945 94 L943 102 L821 102 C818 101 816 99 816 96 Z" />
+            <path d="M816 132 C816 114 830 101 848 101 C858 78 890 76 903 99 C924 94 945 109 945 130 L943 138 L821 138 C818 137 816 135 816 132 Z" />
           </g>
 
           <text
             className="im-word"
             x={622}
-            y={575}
+            y={548}
             textAnchor="middle"
             clipPath="url(#im-mountain-clip)"
             aria-hidden="true"
@@ -245,22 +268,49 @@ export function MountainScene({ a11y }: { a11y: string }) {
             INTERNET
           </text>
 
-          <path className="im-silhouette" d={SILHOUETTE_D} aria-hidden="true" />
-
           <TopographicMountain />
 
           <path
             className="im-climb-path"
             d={CLIMB_PATH_D}
-            pathLength={1}
-            strokeDasharray={1}
-            strokeDashoffset={1}
+            opacity={0}
             aria-hidden="true"
           />
 
           <SummitFlag />
 
+          <g className="im-trail" aria-hidden="true" opacity={0}>
+            <circle r={7} />
+            <circle r={6} />
+            <circle r={5} />
+          </g>
+
           <MonvelaMascot initial={rest} />
+
+          <g className="im-dust" aria-hidden="true" opacity={0}>
+            <g>
+              <circle cx={LANDING.x - 20} cy={LANDING.y + 4} r={7} />
+              <circle cx={LANDING.x - 28} cy={LANDING.y - 2} r={5} />
+              <circle cx={LANDING.x - 12} cy={LANDING.y} r={5} />
+              <circle cx={LANDING.x - 22} cy={LANDING.y + 10} r={4} />
+            </g>
+            <g>
+              <circle cx={LANDING.x + 20} cy={LANDING.y + 6} r={7} />
+              <circle cx={LANDING.x + 28} cy={LANDING.y} r={5} />
+              <circle cx={LANDING.x + 12} cy={LANDING.y + 2} r={5} />
+              <circle cx={LANDING.x + 22} cy={LANDING.y + 12} r={4} />
+            </g>
+          </g>
+
+          <path
+            className="im-descent"
+            d={`M ${LANDING.x} ${LANDING.y - 4} C ${LANDING.x + 6} ${LANDING.y + 40} ${
+              LANDING.x + 10
+            } ${LANDING.y + 80} ${LANDING.x + 8} ${LANDING.y + 124}`}
+            fill="none"
+            aria-hidden="true"
+            opacity={0}
+          />
         </svg>
 
         <p className="im-sr">{a11y}</p>

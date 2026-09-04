@@ -6,11 +6,6 @@
  * direto no HTML. O scrub em si (ler a rolagem e escrever nos elementos) fica em
  * `mountain-scene.tsx` — este arquivo só responde "como está a cena em `p`".
  *
- * Coreografia: o mascote sobe a encosta esquerda com passada alternada, finca a
- * bandeira no cume e — sem tombo — endireita o corpo, respira aliviado e fica de
- * pé ao lado da bandeira. `REST_FRAME` é esse estado final (SSR / sem-JS /
- * `prefers-reduced-motion`).
- *
  * Sistema de coordenadas: viewBox 0 0 1440 788, y para baixo.
  * Ângulos dos membros: 0 = aponta para baixo, positivo = gira para a direita da
  * tela. Ângulo do tronco: 0 = para cima, positivo = inclina para a direita.
@@ -35,12 +30,10 @@ const win = (p: number, a: number, b: number): number => clamp01((p - a) / (b - 
 // Geometria fixa
 // ---------------------------------------------------------------------------
 
-// Cume alto e base baixa dentro do viewBox: a montanha preenche o quadro, sem
-// faixa grande de céu vazio no topo nem o mascote raspando a borda de baixo.
-export const PEAK = { x: 602, y: 120 } as const;
-const BASE_Y = 780;
+export const PEAK = { x: 602, y: 174 } as const;
+const BASE_Y = 750;
 const HALF_L = 520; // meia-largura da montanha na base, lado da subida
-const HALF_R = 560; // lado oposto (um pouco mais largo/suave)
+const HALF_R = 560; // lado da queda (um pouco mais largo/suave)
 const HALF_MIN = 34; // meia-largura do estrato do topo (ponta da montanha)
 
 const SEG = {
@@ -57,16 +50,10 @@ const SEG = {
 export function ridgeLeftY(x: number): number {
   return lerp(BASE_Y, PEAK.y, clamp01((x - (PEAK.x - HALF_L)) / (HALF_L - HALF_MIN)));
 }
-/** Perfil da encosta direita — coincide com a ponta dir. dos estratos. */
+/** Perfil da encosta direita (queda) — coincide com a ponta dir. dos estratos. */
 export function ridgeRightY(x: number): number {
   return lerp(BASE_Y, PEAK.y, clamp01((PEAK.x + HALF_R - x) / (HALF_R - HALF_MIN)));
 }
-
-/** Silhueta externa da montanha (sempre visível, bem discreta) — evita que a
- *  cena comece como uma tela preta antes dos estratos se desenharem. */
-export const SILHOUETTE_D = `M${PEAK.x - HALF_L} ${BASE_Y + 2} L${PEAK.x - 30} ${PEAK.y} L${
-  PEAK.x + 30
-} ${PEAK.y} L${PEAK.x + HALF_R} ${BASE_Y + 2} Z`;
 
 // ---------------------------------------------------------------------------
 // Montanha topográfica — estratos horizontais ondulados, empilhados da base
@@ -108,15 +95,11 @@ function makeContour(i: number, count: number): Contour {
     d += (s === 0 ? "M " : " L ") + x.toFixed(1) + " " + y.toFixed(1);
   }
 
-  // O terço de baixo já entra desenhado (p=0) — a cena nunca começa como tela
-  // preta. Os estratos de cima traçam de baixo para cima e completam ~p≈0.24,
-  // com o mascote já subindo.
-  const drawnFromStart = e < 0.3;
   return {
     d,
-    start: drawnFromStart ? -1 : (e - 0.3) * 0.34,
-    span: drawnFromStart ? 0.001 : 0.05,
-    opacity: Number((0.5 - e * 0.13).toFixed(3)),
+    start: 0.004 + e * 0.092, // base primeiro, topo por último
+    span: 0.05,
+    opacity: Number((0.47 - e * 0.14).toFixed(3)),
   };
 }
 
@@ -135,7 +118,7 @@ type Place = {
   x: number;
   y: number;
   /** escala */ s: number;
-  /** rotação da figura inteira, em graus */ r: number;
+  /** rotação da figura inteira, em graus (contínua no capotamento) */ r: number;
 };
 
 /** Na encosta esquerda (subida), pélvis `dy` acima da borda. */
@@ -146,7 +129,7 @@ const onLeft = (p: number, x: number, dy: number, s: number, r: number): Place =
   s,
   r,
 });
-/** Na encosta direita (o mascote de pé ao lado da bandeira). */
+/** Na encosta direita (queda). */
 const onRight = (p: number, x: number, dy: number, s: number, r: number): Place => ({
   p,
   x,
@@ -156,28 +139,28 @@ const onRight = (p: number, x: number, dy: number, s: number, r: number): Place 
 });
 
 const KEYS: readonly Place[] = [
-  // Subida pela encosta esquerda. Começa já um pouco acima da base (não no canto)
-  // e com escala comprimida (1.4 → 1.12): o mascote nunca fica gigante nem raspa
-  // a borda de baixo.
-  onLeft(0.0, 210, 22, 1.4, 0),
-  onLeft(0.09, 236, 21, 1.37, 0),
-  onLeft(0.16, 280, 21, 1.34, 3),
-  onLeft(0.24, 330, 21, 1.32, 5),
-  onLeft(0.32, 380, 21, 1.3, 6),
-  onLeft(0.4, 434, 21, 1.27, 7),
-  onLeft(0.48, 486, 21, 1.24, 7),
-  onLeft(0.545, 532, 21, 1.22, 6),
-  onLeft(0.58, 564, 19, 1.2, 3),
-  onLeft(0.61, 588, 16, 1.19, 1),
-  // Cume: finca a bandeira (pólo em x≈602).
-  { p: 0.635, x: 600, y: PEAK.y - 8, s: 1.18, r: 0 },
-  // Sai logo de baixo do tecido: desce-e-direita endireitando o corpo.
-  onRight(0.7, 664, 14, 1.16, 0),
-  // Comemora com os braços erguidos — já livre da bandeira, bem abaixo do tecido.
-  onRight(0.78, 700, 13, 1.14, 0),
-  // Respira e assenta num mirante à direita da bandeira, olhando a vista.
-  onRight(0.88, 716, 12, 1.13, 0),
-  onRight(1.0, 724, 12, 1.12, 0),
+  onLeft(0.0, 158, 22, 2.0, 0),
+  onLeft(0.09, 184, 22, 1.97, 0),
+  onLeft(0.16, 242, 22, 1.93, 4),
+  onLeft(0.24, 302, 22, 1.87, 6),
+  onLeft(0.32, 362, 22, 1.82, 7),
+  onLeft(0.4, 420, 22, 1.77, 8),
+  onLeft(0.48, 476, 22, 1.71, 8),
+  onLeft(0.545, 524, 22, 1.66, 7),
+  onLeft(0.6, 566, 20, 1.62, 4),
+  onLeft(0.63, 588, 18, 1.61, 2),
+  { p: 0.655, x: 600, y: PEAK.y - 16, s: 1.6, r: 0 },
+  { p: 0.7, x: 602, y: PEAK.y - 32, s: 1.59, r: 0 },
+  { p: 0.725, x: 611, y: PEAK.y - 26, s: 1.58, r: 10 },
+  { p: 0.745, x: 620, y: PEAK.y - 20, s: 1.575, r: 18 },
+  { p: 0.76, x: 629, y: PEAK.y - 12, s: 1.575, r: 26 },
+  onRight(0.8, 736, 16, 1.52, 214),
+  onRight(0.84, 850, 7, 1.45, 486),
+  onRight(0.878, 960, 3, 1.39, 762),
+  onRight(0.91, 1058, 1, 1.35, 1010),
+  onRight(0.93, 1114, 20, 1.34, 1080),
+  onRight(0.955, 1158, -4, 1.36, 1080),
+  onRight(1.0, 1166, -8, 1.36, 1080),
 ];
 
 /** [tronco, cabeça, braçoEsq(ombro,cotovelo), braçoDir, pernaEsq(quadril,joelho), pernaDir] */
@@ -198,15 +181,14 @@ const P = {
   CLIMB_C: [29, -4, 48, 66, -22, -42, 34, 72, 12, 8],
   CREST: [40, 12, -64, -92, -56, -84, -6, 46, 10, 50],
   PLANT: [17, 5, 16, 34, 26, 46, -10, 26, 12, 30],
-  // Endireita o corpo saindo de baixo da bandeira: quase ereto, braços baixando.
-  RISE: [1, -6, -16, -26, 13, 19, -7, -5, 7, 5],
-  // Cume, sem tombo: braços erguidos num "V" modesto. Só acontece já mais abaixo
-  // e à direita, então o "V" passa bem longe do tecido da bandeira.
-  CHEER: [-3, -12, -120, -140, 120, 140, -8, -5, 8, 5],
-  // Alívio no mirante: inclina à frente, mão esquerda sobe até a testa.
-  EXHALE: [10, 14, -30, -128, 8, 12, -6, -2, 10, 16],
-  // Repouso: em pé, relaxado, mão esquerda de pala na testa, olhando a vista.
-  SETTLE: [4, 7, -22, -96, 8, 12, -7, -4, 8, 5],
+  SUMMIT: [-6, -12, -30, -52, 12, 8, -6, -4, 7, 5],
+  WOBBLE: [14, 16, -46, -88, 64, 104, -24, -52, 14, 34],
+  TEETER: [22, 22, -58, -100, 78, 120, -34, -66, 10, 40],
+  TEETER2: [25, 24, -62, -104, 82, 124, -38, -70, 9, 42],
+  TUMBLE: [4, 0, -40, -74, 42, 78, -30, -58, 34, 62],
+  IMPACT: [10, 12, -28, -66, 30, 68, 42, 80, 48, 84],
+  SIT_LAND: [-25, -3, -22, -14, 16, 10, 80, 86, 100, 106],
+  SIT_REST: [-15, -8, -16, -10, 12, 8, 87, 93, 96, 101],
 } satisfies Record<string, Pose>;
 
 const POSES: readonly { p: number; pose: Pose }[] = [
@@ -216,13 +198,17 @@ const POSES: readonly { p: number; pose: Pose }[] = [
   { p: 0.3, pose: P.CLIMB_A },
   { p: 0.42, pose: P.CLIMB_B },
   { p: 0.52, pose: P.CLIMB_C },
-  { p: 0.575, pose: P.CREST },
-  { p: 0.63, pose: P.PLANT },
-  { p: 0.7, pose: P.RISE },
-  { p: 0.78, pose: P.CHEER },
-  { p: 0.87, pose: P.EXHALE },
-  { p: 0.93, pose: P.SETTLE },
-  { p: 1.0, pose: P.SETTLE },
+  { p: 0.6, pose: P.CREST },
+  { p: 0.645, pose: P.PLANT },
+  { p: 0.7, pose: P.SUMMIT },
+  { p: 0.725, pose: P.WOBBLE },
+  { p: 0.745, pose: P.TEETER },
+  { p: 0.756, pose: P.TEETER2 },
+  { p: 0.8, pose: P.TUMBLE },
+  { p: 0.9, pose: P.TUMBLE },
+  { p: 0.928, pose: P.IMPACT },
+  { p: 0.95, pose: P.SIT_LAND },
+  { p: 1.0, pose: P.SIT_REST },
 ];
 
 function samplePlace(p: number): { x: number; y: number; s: number; r: number } {
@@ -266,7 +252,7 @@ function samplePlace(p: number): { x: number; y: number; s: number; r: number } 
     x: hermite(a.x, b.x, before.x, after.x),
     y: hermite(a.y, b.y, before.y, after.y),
     s: hermite(a.s, b.s, before.s, after.s),
-    r: lerp(a.r, b.r, lt),
+    r: lerp(a.r, b.r, lt), // rotação: linear, o movimento já é monotônico
   };
 }
 
@@ -355,8 +341,7 @@ function fk(pose: number[]): MascotGeo {
 }
 
 // ---------------------------------------------------------------------------
-// Rastro da subida — some desenhado ATRÁS do mascote conforme ele sobe (não é
-// um trilho pré-desenhado à frente). Curva suave pelos keyframes da encosta.
+// Caminho da escalada (rastro laranja discreto) — curva suave pelos keyframes
 // ---------------------------------------------------------------------------
 
 function smoothPath(pts: readonly [number, number][]): string {
@@ -375,11 +360,13 @@ function smoothPath(pts: readonly [number, number][]): string {
 }
 
 export const CLIMB_PATH_D = smoothPath(
-  KEYS.filter((k) => k.p >= 0.06 && k.p <= 0.66).map(
-    // leve zigue-zague lateral: lê como escalada, não como trilho reto
-    (k, i): [number, number] => [k.x - 2 + (i % 2 === 0 ? -5 : 7), k.y + 18],
+  KEYS.filter((k) => k.p >= 0.09 && k.p <= 0.63).map(
+    (k): [number, number] => [k.x - 2, k.y + 18],
   ),
 );
+
+/** Ponto de pouso — origem da "poeira" e da linha laranja de transição. */
+export const LANDING = { x: 1166, y: 760 } as const;
 
 // ---------------------------------------------------------------------------
 // Quadro completo da cena em `p`
@@ -394,10 +381,12 @@ export type Frame = {
   } & MascotGeo;
   mountain: { draw: number[]; opacity: number; ty: number };
   word: { opacity: number; blur: number; ty: number };
-  /** Progresso do rastro desenhado atrás do mascote (0..1). */
   climb: number;
   flag: { pole: number; furl: number; windOpacity: number };
   clouds: readonly { x: number; y: number; rot: number }[];
+  trailVis: number;
+  dust: { scale: number; opacity: number };
+  descent: number;
 };
 
 /** Abertura da bandeira com um leve exagero elástico antes de assentar em 1. */
@@ -418,70 +407,90 @@ export function computeFrame(
   const pose = samplePose(p);
 
   // Passada contínua durante a escalada. O balanço cruza os keyframes de pose,
-  // alternando os lados como numa escalada real, com alcance amplo e cadência
-  // um pouco mais lenta (menos passos, mais longos). Some suavemente perto do
-  // cume para não atrapalhar a ação de fincar a bandeira.
-  const climbIn = smooth(win(p, 0.11, 0.2));
-  const climbOut = 1 - smooth(win(p, 0.5, 0.575));
+  // alternando os lados como numa escalada real e desaparece suavemente perto
+  // do cume para não interferir com a ação de fincar a bandeira.
+  const climbIn = smooth(win(p, 0.12, 0.2));
+  const climbOut = 1 - smooth(win(p, 0.555, 0.635));
   const climbMotion = climbIn * climbOut;
-  let climbSwing = 0;
   if (climbMotion > 0) {
-    const phase = win(p, 0.12, 0.57) * Math.PI * 7;
+    const phase = win(p, 0.13, 0.62) * Math.PI * 8.5;
     const step = Math.sin(phase);
     const settle = Math.sin(phase * 2);
-    climbSwing = step;
-    pose[0] += step * 4.5 * climbMotion; // tronco contrabalança a passada
-    pose[1] -= step * 3 * climbMotion;
-    pose[2] += step * 30 * climbMotion; // braço esq.
-    pose[3] += step * 34 * climbMotion;
-    pose[4] -= step * 30 * climbMotion; // braço dir. em oposição
-    pose[5] -= step * 34 * climbMotion;
-    pose[6] -= step * 26 * climbMotion; // perna esq.
-    pose[7] -= step * 30 * climbMotion;
-    pose[8] += step * 26 * climbMotion; // perna dir. em oposição
-    pose[9] += step * 30 * climbMotion;
-    pose[1] += settle * 1.4 * climbMotion; // leve balanço vertical da cabeça
+    pose[0] += settle * 2.8 * climbMotion;
+    pose[1] -= step * 2.2 * climbMotion;
+    pose[2] += step * 18 * climbMotion;
+    pose[3] += step * 23 * climbMotion;
+    pose[4] -= step * 18 * climbMotion;
+    pose[5] -= step * 23 * climbMotion;
+    pose[6] -= step * 17 * climbMotion;
+    pose[7] -= step * 24 * climbMotion;
+    pose[8] += step * 17 * climbMotion;
+    pose[9] += step * 24 * climbMotion;
+  }
+
+  // Capotamento: membros soltos (o giro é da figura inteira, na raiz).
+  if (p > 0.758 && p < 0.918) {
+    const ph = pl.r * DEG * 0.9;
+    pose[2] += Math.sin(ph) * 9;
+    pose[3] += Math.sin(ph + 1.1) * 11;
+    pose[4] += Math.sin(ph + 3.1) * 9;
+    pose[5] += Math.sin(ph + 4.2) * 11;
+    pose[6] += Math.sin(ph + 2) * 8;
+    pose[7] += Math.sin(ph + 0.5) * 9;
+    pose[8] += Math.sin(ph + 5) * 8;
+    pose[9] += Math.sin(ph + 3.6) * 9;
   }
 
   const geo = fk(pose);
 
-  // Zigue-zague leve na encosta + sobe-desce da passada: tira a leitura de
-  // "deslizando num trilho reto".
-  const x = pl.x + climbSwing * 9 * climbMotion;
+  // Arcos balísticos entre os contatos com a encosta. Cada quique perde altura,
+  // dando peso à descida em vez de manter a figura colada à montanha.
   let y = pl.y;
-  if (climbMotion > 0) {
-    y -= Math.abs(Math.sin(win(p, 0.12, 0.57) * Math.PI * 7)) * 3 * climbMotion;
+  const bounces = [
+    [0.758, 0.8, 34],
+    [0.8, 0.84, 27],
+    [0.84, 0.878, 20],
+    [0.878, 0.912, 13],
+    [0.912, 0.932, 6],
+  ] as const;
+  for (const [start, end, height] of bounces) {
+    if (p >= start && p <= end) {
+      y -= Math.sin(win(p, start, end) * Math.PI) * height;
+      break;
+    }
   }
 
-  // Assentamento suave no fim (não apaga a cena — a montanha só recua de leve).
-  const fadeT = reduced ? 0 : smooth(win(p, 0.94, 1));
-  // "INTERNET" já entra como um fantasma leve e ganha corpo cedo na subida.
-  const rise = reduced ? 1 : lerp(0.18, 1, smooth(win(p, 0.02, 0.16)));
+  if (climbMotion > 0) {
+    y -= Math.abs(Math.sin(win(p, 0.13, 0.62) * Math.PI * 8.5)) * 2.6 * climbMotion;
+  }
+
+  const fadeT = reduced ? 0 : smooth(win(p, 0.9, 1));
+  const rise = reduced ? 1 : smooth(win(p, 0.05, 0.16));
 
   return {
     mascot: {
-      rootX: x,
+      rootX: pl.x,
       rootY: y,
       rootRot: pl.r,
-      rootScale: pl.s * (compact ? 1.22 : 1),
+      rootScale: pl.s * (compact ? 1.24 : 1),
       ...geo,
     },
     mountain: {
       draw: CONTOURS.map((c) => (reduced ? 1 : clamp01((p - c.start) / c.span))),
-      opacity: lerp(1, 0.9, fadeT),
-      ty: lerp(0, -4, fadeT),
+      opacity: lerp(1, 0.32, fadeT),
+      ty: lerp(0, -16, fadeT),
     },
     word: {
-      opacity: rise * lerp(1, 0.72, fadeT),
-      blur: (1 - clamp01(rise)) * 7,
-      ty: (1 - clamp01(rise)) * 12,
+      opacity: rise * lerp(1, 0.28, fadeT),
+      blur: (1 - rise) * 8,
+      ty: (1 - rise) * 14,
     },
-    // rastro da subida: cresce com a escalada, assenta no cume
-    climb: reduced ? 1 : clamp01((p - 0.08) / 0.5),
+    // opacidade do rastro da subida (não um "wipe": aparece de leve, some na saída)
+    climb: reduced ? 0 : clamp01((p - 0.14) / 0.42) * 0.5 * (1 - fadeT * 0.8),
     flag: {
-      pole: reduced ? 1 : smooth(win(p, 0.6, 0.635)),
-      furl: reduced ? 1 : furlEase(win(p, 0.635, 0.69)),
-      windOpacity: reduced ? 0 : win(p, 0.63, 0.66) * (1 - win(p, 0.78, 0.86)) * 0.5,
+      pole: reduced ? 1 : smooth(win(p, 0.628, 0.662)),
+      furl: reduced ? 1 : furlEase(win(p, 0.662, 0.715)),
+      windOpacity: reduced ? 0 : win(p, 0.66, 0.686) * (1 - win(p, 0.77, 0.82)) * 0.5,
     },
     // Camadas com massas aparentes diferentes: a nuvem distante deriva menos;
     // a mais próxima percorre mais espaço e inclina levemente com o vento.
@@ -490,45 +499,14 @@ export function computeFrame(
       { x: 28 - p * 138, y: Math.sin(p * Math.PI * 2.8 + 1.4) * 8, rot: 1.5 - p * 3 },
       { x: -18 + p * 176, y: Math.sin(p * Math.PI * 3.2 + 2.1) * 10, rot: -2 + p * 4 },
     ],
+    trailVis: reduced ? 0 : win(p, 0.76, 0.79) * (1 - win(p, 0.9, 0.94)),
+    dust: (() => {
+      const d = reduced ? 0 : win(p, 0.922, 0.935) * (1 - win(p, 0.945, 0.99));
+      return { scale: 0.32 + d, opacity: d * 0.5 };
+    })(),
+    descent: reduced ? 0 : win(p, 0.95, 0.99),
   };
 }
 
 /** Estado final da cena — serve de base para SSR, sem-JS e reduced-motion. */
 export const REST_FRAME: Frame = computeFrame(1, { reduced: true });
-
-// ---------------------------------------------------------------------------
-// Enquadramento (viewBox)
-//
-// No desktop é fixo e mostra a montanha inteira. Em telas estreitas o viewBox
-// largo (1440×788) não cabe em retrato: com `xMidYMid meet` a cena virava uma
-// faixa minúscula no meio de muito preto. Então em `compact` a "câmera"
-// acompanha o mascote encosta acima (janela alta e estreita) e assenta no cume.
-// ---------------------------------------------------------------------------
-
-export const VIEWBOX_FULL = "0 0 1440 788";
-
-const CAM_W = 440;
-const CAM_H = 780;
-/** Canto x da janela por progresso — segue o mascote e para na bandeira. */
-const CAM_X: readonly (readonly [number, number])[] = [
-  [0.0, 40],
-  [0.34, 170],
-  [0.62, 365],
-  [1.0, 430],
-];
-
-export function computeViewBox(p: number, compact: boolean): string {
-  if (!compact) return VIEWBOX_FULL;
-  const c = clamp01(p);
-  let x = CAM_X[CAM_X.length - 1][1];
-  for (let i = 0; i < CAM_X.length - 1; i++) {
-    const [pa, xa] = CAM_X[i];
-    const [pb, xb] = CAM_X[i + 1];
-    if (c <= pb) {
-      x = lerp(xa, xb, smooth((c - pa) / (pb - pa)));
-      break;
-    }
-  }
-  const y = lerp(6, 12, c);
-  return `${x.toFixed(1)} ${y.toFixed(1)} ${CAM_W} ${CAM_H}`;
-}

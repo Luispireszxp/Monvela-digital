@@ -13,24 +13,24 @@ export function SummitFlag() {
   return (
     <>
       <g className="im-wind" aria-hidden="true" opacity={0}>
-        <line x1={358} y1={44} x2={904} y2={36} />
-        <line x1={338} y1={78} x2={846} y2={84} />
-        <line x1={420} y1={114} x2={760} y2={107} />
+        <line x1={358} y1={70} x2={904} y2={62} />
+        <line x1={338} y1={104} x2={846} y2={110} />
+        <line x1={420} y1={140} x2={760} y2={133} />
       </g>
 
       <g className="im-flag" aria-hidden="true">
         <rect
           className="im-pole"
           x={PEAK.x - 1.5}
-          y={18}
+          y={44}
           width={3}
-          height={PEAK.y - 18 + 4}
+          height={PEAK.y - 44 + 4}
           rx={1.5}
         />
         <g className="im-flag-cloth">
           <g className="im-flag-wave">
-            <path d="M602 26 C 648 16 700 34 744 24 C 742 44 742 56 744 76 C 700 66 648 84 602 73 Z" />
-            <text x={672} y={52} textAnchor="middle">
+            <path d="M602 52 C 648 42 700 60 744 50 C 742 70 742 82 744 102 C 700 92 648 110 602 99 Z" />
+            <text x={672} y={78} textAnchor="middle">
               SUA EMPRESA
             </text>
           </g>
