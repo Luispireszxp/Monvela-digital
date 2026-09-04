@@ -13,6 +13,7 @@ import { Partners } from "@/components/partners";
 import { Problem } from "@/components/problem";
 import { Process } from "@/components/process";
 import { Solution } from "@/components/solution";
+import { VelaFarewell } from "@/components/vela-farewell";
 
 // Conteúdo das seções Solução (pilares) e Dúvidas (FAQ) vem do Supabase (ISR):
 // edições no banco aparecem no site em até 60s, sem novo deploy.
@@ -36,6 +37,7 @@ export default function Home() {
       <FAQ />
       <Contact />
       <FinalCTA />
+      <VelaFarewell />
     </main>
   );
 }

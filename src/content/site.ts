@@ -29,6 +29,13 @@ type ProcessStep = {
   readonly text: string;
 };
 type FaqItem = { readonly question: string; readonly answer: string };
+type VelaFarewell = {
+  readonly eyebrow: string;
+  readonly title: string;
+  /** Ponto final em destaque, na cor de acento. */
+  readonly titleMark: string;
+  readonly description: string;
+};
 type FeaturedProject = {
   readonly eyebrow: string;
   readonly title: string;
@@ -148,6 +155,7 @@ export interface SiteConfig {
     readonly description: string;
     readonly button: string;
   };
+  readonly velaFarewell: VelaFarewell;
   readonly footer: {
     readonly positioning: string;
     readonly emailFallback: string;
@@ -509,6 +517,12 @@ export const siteConfig = {
     description:
       "Conte sobre o seu negócio e receba uma ideia inicial para o seu projeto. Atendimento direto pelo WhatsApp, sem compromisso.",
     button: "Falar agora no WhatsApp",
+  },
+  velaFarewell: {
+    eyebrow: "Nosso companheiro",
+    title: "Conheça o Vela",
+    titleMark: ".",
+    description: "Ele está por todos os cantos do site — e veio se despedir de você.",
   },
   footer: {
     positioning:
