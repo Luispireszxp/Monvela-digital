@@ -29,6 +29,16 @@ type ProcessStep = {
   readonly text: string;
 };
 type FaqItem = { readonly question: string; readonly answer: string };
+type FeaturedProject = {
+  readonly eyebrow: string;
+  readonly title: string;
+  readonly description: string;
+  readonly hint: string;
+  readonly projectName: string;
+  readonly projectUrl: string;
+  /** Alt da captura de tela real dentro do notebook. */
+  readonly screenshotAlt: string;
+};
 
 export interface SiteConfig {
   readonly name: string;
@@ -95,6 +105,7 @@ export interface SiteConfig {
     readonly accessibleLabel: string;
     readonly steps: readonly CycleStep[];
   };
+  readonly featuredProject: FeaturedProject;
   readonly conceptsSection: SectionIntro & {
     readonly disclaimer: string;
     readonly ctaLabel: string;
@@ -286,6 +297,16 @@ export const siteConfig = {
       { label: "Medimos", text: "O Analytics ajuda a medir o que funciona." },
       { label: "Organizamos", text: "As ferramentas de gestão organizam o atendimento." },
     ],
+  },
+  featuredProject: {
+    eyebrow: "Último lançamento",
+    title: "Veja um projeto funcionando de verdade.",
+    description: "Este site foi desenvolvido para a Oficina Irmãos Pires.",
+    hint: "clique no notebook",
+    projectName: "Oficina Irmãos Pires",
+    projectUrl: "https://oficina-pires.vercel.app/",
+    screenshotAlt:
+      'Página inicial do site da Oficina Irmãos Pires, com o título "Seu carro merece voltar melhor do que chegou" e os botões Solicitar orçamento e Falar no WhatsApp.',
   },
   conceptsSection: {
     eyebrow: "Projetos-conceito",

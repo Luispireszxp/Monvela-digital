@@ -584,6 +584,77 @@ img { max-width: 100%; }
 .cycle-step p { margin: 0; color: var(--muted-dark); font-size: 0.86rem; line-height: 1.55; }
 .cycle-arrow { position: absolute; right: -0.72rem; top: 1.4rem; z-index: 2; display: grid; width: 1.45rem; height: 1.45rem; place-items: center; border-radius: 50%; background: var(--orange); color: var(--ink); font-style: normal; font-size: 0.75rem; }
 
+/* Último lançamento — notebook ilustrado (contornos finos) com a captura real
+   do site do cliente; abre uma vez ao entrar na tela (ver
+   featured-project-reveal.tsx). Base = notebook já aberto (SSR, sem-JS,
+   reduced-motion); as regras que o escondem fechado só existem dentro de
+   `prefers-reduced-motion: no-preference`. */
+.fp-stage-wrap { display: flex; flex-direction: column; align-items: center; margin-top: clamp(3rem, 6vw, 5rem); }
+
+.fp-link { display: block; width: 100%; max-width: 50rem; text-decoration: none; color: inherit; border-radius: 1.2rem; }
+.fp-link:focus-visible { outline: 2px solid var(--orange); outline-offset: 10px; border-radius: 1.2rem; }
+
+/* peças do notebook são <span>: sem display:block explícito, ficam inline e
+   ignoram width/aspect-ratio — foi por isso que a tela colapsava numa fatia. */
+.fp-stage,
+.fp-lid,
+.fp-bezel,
+.fp-screen,
+.fp-screen-sheen,
+.fp-hinge,
+.fp-base,
+.fp-notch,
+.fp-trackpad {
+  display: block;
+}
+
+.fp-stage { position: relative; width: 100%; }
+/* perspective precisa estar no PAI DIRETO do elemento com rotateX (.fp-lid) —
+   no avô (.fp-stage) ela não propagava e a abertura não tinha profundidade. */
+.fp-laptop { display: flex; flex-direction: column; align-items: center; width: 100%; perspective: 1700px; transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1); }
+@media (hover: hover) {
+  .fp-link:hover .fp-laptop { transform: translateY(-4px) scale(1.012); }
+  .fp-link:hover .fp-screen-sheen { opacity: 0.16; }
+}
+.fp-link:focus-visible .fp-laptop { transform: translateY(-4px) scale(1.012); }
+
+.fp-lid { position: relative; width: 100%; transform-origin: 50% 100%; }
+.fp-bezel { border: 1.5px solid rgba(244, 241, 234, 0.3); border-radius: 1rem 1rem 0.3rem 0.3rem; background: var(--ink-soft); padding: 0.7rem 0.7rem 0.5rem; }
+.fp-notch { position: absolute; top: 0.32rem; left: 50%; width: 0.28rem; height: 0.28rem; border-radius: 50%; background: rgba(244, 241, 234, 0.3); transform: translateX(-50%); }
+.fp-screen { position: relative; overflow: hidden; width: 100%; aspect-ratio: 1600 / 917; border-radius: 0.5rem; background: var(--ink); }
+.fp-screenshot { object-fit: cover; object-position: top center; }
+.fp-screen-sheen { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255, 255, 255, 0.32), transparent 55%); opacity: 0; transition: opacity 320ms ease; pointer-events: none; }
+
+.fp-hinge { width: 38%; height: 0.42rem; margin-inline: auto; background: var(--ink-soft); border-radius: 0 0 0.3rem 0.3rem; }
+.fp-base { position: relative; width: 107%; height: 1rem; border: 1.5px solid rgba(244, 241, 234, 0.22); border-top: none; border-radius: 0 0 0.9rem 0.9rem; background: linear-gradient(180deg, var(--ink-soft), var(--ink)); }
+.fp-trackpad { position: absolute; top: 0.2rem; left: 50%; width: 5rem; height: 0.2rem; border-radius: 999px; background: rgba(244, 241, 234, 0.14); transform: translateX(-50%); }
+
+.fp-hint { display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin: 1.75rem 0 0; color: rgba(244, 241, 234, 0.42); font-size: 0.8rem; letter-spacing: 0.02em; }
+.fp-cursor { width: 0.8rem; height: 0.8rem; fill: var(--orange); flex: none; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .fp-reveal[data-fp="off"] .fp-lid { transform: rotateX(-100deg); }
+  .fp-reveal[data-fp="off"] .fp-screenshot { opacity: 0; filter: brightness(0.35); }
+  .fp-reveal[data-fp="off"] .fp-hint { opacity: 0; transform: translateY(0.5rem); }
+
+  .fp-reveal[data-fp="on"] .fp-lid { animation: fp-open 1.3s cubic-bezier(0.65, 0, 0.35, 1) both; }
+  .fp-reveal[data-fp="on"] .fp-screenshot { animation: fp-screen-on 700ms ease-out 950ms both; }
+  .fp-reveal[data-fp="on"] .fp-hint { animation: fp-hint-in 550ms cubic-bezier(0.22, 1, 0.36, 1) 1650ms both; }
+}
+
+@keyframes fp-open {
+  from { transform: rotateX(-100deg); }
+  to { transform: rotateX(0deg); }
+}
+@keyframes fp-screen-on {
+  from { opacity: 0; filter: brightness(0.35); }
+  to { opacity: 1; filter: brightness(1); }
+}
+@keyframes fp-hint-in {
+  from { opacity: 0; transform: translateY(0.5rem); }
+  to { opacity: 1; transform: none; }
+}
+
 /* Projetos-conceito */
 .concepts { overflow: hidden; background: linear-gradient(145deg, #07131e, var(--ink) 60%); }
 .concept-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
@@ -786,6 +857,8 @@ img { max-width: 100%; }
   .cj-steps { gap: 1.5rem; width: 100%; }
   .cj-step-text { max-width: none; }
   .cj-closing { margin-top: 2.5rem; }
+  .fp-base { width: 104%; }
+  .fp-hinge { width: 34%; }
   .contact-form .field-row { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr; }
   .footer-bottom { flex-direction: column; }
